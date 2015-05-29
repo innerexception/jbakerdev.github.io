@@ -1,4 +1,4 @@
-define(['ractive', 'rv!/grades/src/gradeApp/gradeAppTemplate.html', 'css!/grades/src/gradeApp/gradeAppStyles'],
+define(['ractive', 'rv!/src/gradeApp/gradeAppTemplate.html', 'css!/src/gradeApp/gradeAppStyles'],
     function(Ractive, gradeAppTemplate){
 
         var gradeApp = function(containerDomId){
