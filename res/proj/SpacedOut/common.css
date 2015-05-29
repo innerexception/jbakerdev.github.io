@@ -1,0 +1,35 @@
+@font-face {
+    font-family: 'Press Start 2P';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Press Start 2P'), url(./js/lib/PressStart2P.woff2) format('woff2');
+}
+
+div{
+    font-family: 'Press Start 2P';
+    font-size: 10px;
+}
+
+#appRoot{
+    overflow: hidden;
+}
+
+.inner-panel{
+    transition: border 1s;
+    height: 100%;
+    background-color: black;
+    border: 1px solid white;
+    border-radius: 3px;
+    color: white;
+    padding: 5px;
+}
+
+.well{
+    background-color: gray !important;
+    padding: 5px !important;
+    margin-bottom: 5px !important;
+}
+
+.inline{
+    display: inline-block;
+}

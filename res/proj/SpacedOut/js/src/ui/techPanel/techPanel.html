@@ -1,0 +1,29 @@
+<div class="inner-panel">
+    <img class="well research-label" src="./js/res/img/icon_tech.png" />
+    <div class="research-levels">
+        <div><img src="./js/res/img/icon-range.png"/>{{player.techs.range.level}}</div>
+        <div><img src="./js/res/img/icon-speed.png"/>{{player.techs.speed.level}}</div>
+        <div><img src="./js/res/img/icon-shield.png"/>{{player.techs.shield.level}}</div>
+        <div><img src="./js/res/img/icon-weapon.png"/>{{player.techs.weapon.level}}</div>
+        <div><img src="./js/res/img/icon-mini.png"/>{{player.techs.mini.level}}</div>
+        <div><img src="./js/res/img/icon-radical.png"/>X</div>
+    </div>
+    <div class="research-summary">
+        <div class="slider-panel">
+            <input type="range" class="range-slider" data-type="range" value="{{player.techs.range.rate}}" on-change="onTechSpendingChanged" on-input="onTechSpendingChanged" />
+            <input type="range" class="speed-slider" data-type="speed" value="{{player.techs.speed.rate}}" on-change="onTechSpendingChanged" on-input="onTechSpendingChanged" />
+            <input type="range" class="shield-slider" data-type="shield" value="{{player.techs.shield.rate}}" on-change="onTechSpendingChanged" on-input="onTechSpendingChanged" />
+            <input type="range" class="weapon-slider" data-type="weapon" value="{{player.techs.weapon.rate}}" on-change="onTechSpendingChanged" on-input="onTechSpendingChanged" />
+            <input type="range" class="mini-slider" data-type="mini" value="{{player.techs.mini.rate}}" on-change="onTechSpendingChanged" on-input="onTechSpendingChanged" />
+            <input type="range" class="radical-slider" data-type="radical" value="{{player.techs.radical.rate}}" on-change="onTechSpendingChanged" on-input="onTechSpendingChanged" />
+        </div>
+        <div class="slider-icons-panel">
+            <img data-type="range" on-click="onLockTechClick" style="padding-left:29px;" src="./js/res/img/icon-range.png"/>
+            <img data-type="speed" on-click="onLockTechClick" src="./js/res/img/icon-speed.png"/>
+            <img data-type="shield" on-click="onLockTechClick" src="./js/res/img/icon-shield.png"/>
+            <img data-type="weapon" on-click="onLockTechClick" src="./js/res/img/icon-weapon.png"/>
+            <img data-type="mini" on-click="onLockTechClick" style="padding-left:64px;" src="./js/res/img/icon-mini.png"/>
+            <img data-type="radical" on-click="onLockTechClick" style="padding-left:59px;" src="./js/res/img/icon-radical.png"/>
+        </div>
+    </div>
+</div>

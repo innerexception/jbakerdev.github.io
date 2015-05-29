@@ -1,0 +1,80 @@
+<div class="inner-panel">
+    <div class="col-md-4">
+        <div class="list-group design-list well">
+            {{#player.designs:i}}
+                {{>designItem}}
+            {{/player.designs}}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="cost-panel well">
+            <div>{{selectedDesign.type}}</div>
+            <img style="width:100%;" src="{{selectedDesign.spriteGroup.thumbnailPath}}" />
+            <div>
+                1st <img class="inline" src="./js/res/img/icon_budget.png" />:
+                <div class="inline"> {{selectedDesign.prototypeCost}}</div>
+            </div>
+            <div>
+                2nd+ <img class="inline" src="./js/res/img/icon_budget.png" />:
+                <div class="inline"> {{selectedDesign.productionCost}}</div>
+            </div>
+            <div>
+                <img class="inline" src="./js/res/img/icon-metal.png" />:
+                <div class="inline"> {{selectedDesign.metalCost}}</div>
+            </div>
+            <div>
+                <select on-change="onTypeSelected">
+                    <option value="colony" selected="{{selectedDesign.type==='colony'}}">colony</option>
+                    <option value="tanker" selected="{{selectedDesign.type==='tanker'}}">tanker</option>
+                    <option value="scout" selected="{{selectedDesign.type==='scout'}}">scout</option>
+                    <option value="dreadnaught" selected="{{selectedDesign.type==='dreadnaught'}}">dreadnaught</option>
+                    <option value="fighter" selected="{{selectedDesign.type==='fighter'}}">fighter</option>
+                    <option value="platform" selected="{{selectedDesign.type==='platform'}}">platform</option>
+                </select>
+                <div class="inline">X</div>
+                <input id="shipNumber" value="0" style="width:38px !important; color:black;" type="number" on-change="onNumberChanged" min="0" max="25" />
+                <div class="inline">= $ {{selectedDesign.prototypeCost + (selectedDesign.productionCost * selectedDesign.number)}} /</div>
+                <div class="inline">{{selectedDesign.metalCost * selectedDesign.number}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="well list-group stats-panel">
+            <div>
+                <img class="inline" src="./js/res/img/icon-range.png" />
+                <div class="inline">{{selectedDesign.rangeLevel || 0}}</div>
+                <input class="inline" data-id="rangeLevel" value="{{selectedDesign.rangeLevel || 0}}" type="range" min="1" max="{{player.techs.range.level}}" on-change="onStatChanged" />
+            </div>
+            <div>
+                <img class="inline" src="./js/res/img/icon-speed.png" />
+                <div class="inline">{{selectedDesign.speedLevel || 0}}</div>
+                <input class="inline" data-id="speedLevel" value="{{selectedDesign.speedLevel || 0}}" type="range" min="1" max="{{player.techs.speed.level}}" on-change="onStatChanged" />
+            </div>
+            <div>
+                <img class="inline" src="./js/res/img/icon-shield.png" />
+                <div class="inline">{{selectedDesign.shield || 0}}</div>
+                <input class="inline" data-id="shield" value="{{selectedDesign.shield || 0}}" type="range" min="1" max="{{player.techs.shield.level}}" on-change="onStatChanged" />
+            </div>
+            <div>
+                <img class="inline" src="./js/res/img/icon-weapon.png" />
+                <div class="inline">{{selectedDesign.weapon || 0}}</div>
+                <input class="inline" data-id="weapon" value="{{selectedDesign.weapon || 0}}" min="1" max="{{player.techs.weapon.level}}" type="range" on-change="onStatChanged" />
+            </div>
+            <div>
+                <img class="inline" src="./js/res/img/icon-mini.png" />
+                <div class="inline">{{selectedDesign.mini || 0}}</div>
+                <input class="inline" data-id="mini" value="{{selectedDesign.mini || 0}}" min="0" max="{{player.techs.mini.level}}" type="range" on-change="onStatChanged" />
+            </div>
+        </div>
+        <div class="well" on-click="onDoneClicked">Build @ {{selectedPlanet ? selectedPlanet.name : player.homeWorld.name}}</div>
+    </div>
+</div>
+
+<!-- {{>designItem}} -->
+<div class="well">
+    <div class="{{isSelected ? 'selected' : ''}}">
+        <div>{{type}}</div>
+        <img on-click="onDesignClick" style="width:100%;" src="{{spriteGroup.thumbnailPath}}"/>
+    </div>
+</div>
+<!-- {{/designItem}} -->

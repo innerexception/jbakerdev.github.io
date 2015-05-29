@@ -1,0 +1,44 @@
+.shipBuilderIn{
+    opacity: 1;
+    height: calc(100% - 1px);
+}
+
+.shipBuilderOut{
+    opacity: 0;
+    height: 1px;
+    pointer-events: none;
+}
+
+.ship-builder-panel{
+    transition: height 1s, opacity 1s;
+    position: absolute;
+    left: 13%;
+    width: 50% !important;
+    top: 40%;
+    height: 44%;
+    z-index: 1;
+}
+.stats-panel img{
+    width: 20px !important;
+}
+.stats-panel input{
+    width: 70% !important;
+    display: inline-block !important;
+}
+.stats-panel{
+    height: 58%;
+}
+.cost-panel img{
+    width: 20px;
+}
+.cost-panel{
+    height: 100%;
+}
+.design-list{
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.selected{
+    background-color: black;
+}

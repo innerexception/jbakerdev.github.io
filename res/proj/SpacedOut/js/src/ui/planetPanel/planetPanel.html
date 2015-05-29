@@ -1,0 +1,34 @@
+<div class="inner-panel">
+    <div class="well">
+        {{planet.name}}
+        <img src="{{planet.surfaceImagePath}}" />
+    </div>
+    <div class="list-group">
+        <div class="gravity-div"><img src="./js/res/img/icon-gravity.png" /> {{planet.gravity}}</div>
+        <div><img src="./js/res/img/icon-person.png" />{{planet.population}}<span>({{(planet.populationGrowth > 0 ? '+' : '') + planet.populationGrowth}})</span></div>
+        <div><img src="./js/res/img/icon-temp.png" />{{planet.temp}}<span>({{(planet.tempChange > 0 ? '+' : '') + planet.tempChange}})</span></div>
+        <div><img src="./js/res/img/icon_budget.png" />{{planet.income}}<span>({{(planet.incomeGrowth > 0 ? '+' : '') + planet.incomeGrowth}})</span></div>
+        <div><img src="./js/res/img/icon-metal.png" />{{planet.metal}}<span>({{planet.miningChange}})</span></div>
+    </div>
+    <div class="planet-balance-slider">
+        <img src="./js/res/img/icon-mining.png" />
+        <input disabled="{{!planet.owner}}" id="planetBalanceSlider" type="range" value="{{planet.terraformPercent}}" on-input="onPlanetGrowthChanged"/>
+        <img src="./js/res/img/icon-terraform.png" />
+    </div>
+    <div class="well fleet-well">
+        <div>Fleets</div>
+        <div class="list-group">
+            {{#planet.fleets:i}}
+                {{>fleetItem}}
+            {{/planet.fleets}}
+        </div>
+    </div>
+</div>
+
+
+<!-- {{>fleetItem}} -->
+<div class="well {{inTransit ? 'hidden' : ''}}">
+    <div class="{{isSelected ? 'selected-fleet' : ''}} {{queuedForTravel ? 'traveling' : ''}}" on-dblclick="onFleetEdit" on-click="onFleetSelected">{{name}}</div>
+</div>
+<!-- {{/fleetItem}} -->
+

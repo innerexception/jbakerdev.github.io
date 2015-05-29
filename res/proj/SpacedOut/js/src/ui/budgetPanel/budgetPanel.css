@@ -1,0 +1,104 @@
+.budgetPanelIn{
+    left: 0;
+    opacity: 0.8;
+}
+
+.budgetPanelOut{
+    left: -20%;
+    opacity: 0;
+}
+
+.budget-panel{
+    transition: left 1s, opacity 1s;
+    position: absolute;
+    top:100%;
+    width: 200px !important;
+}
+
+.planet-well{
+    height: 68%;
+}
+
+.planet-well .list-group{
+    overflow-y: scroll;
+    max-height: 80%;
+}
+
+.planet-well .list-group img{
+    display: inline-block;
+    width: 40%;
+}
+
+.planet-well .list-group input{
+    display: inline-block;
+}
+
+.planet-well .list-group label{
+    display: inline-block;
+    vertical-align: top;
+    max-width: 50%;
+    font-size: 8px;
+}
+
+.budget-balance-slider img{
+    display: inline-block;
+    width: 15%;
+}
+.budget-balance-slider input{
+    display: inline-block !important;
+    width: 50% !important;
+    vertical-align: middle;
+}
+.budget-balance-slider{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.top-sliders{
+    margin-bottom: 10px;
+}
+
+.budget-panel .top-sliders img{
+    display: inline-block;
+    height: 20px;
+}
+
+.budget-panel .top-sliders input{
+    width: 75%;
+    display: inline-block;
+}
+
+.budget-panel .top-sliders div{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.budget-label{
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 10px;
+    width: 35px;
+}
+
+.top-budget-labels img{
+    display: inline-block;
+    width: 20px;
+}
+
+.budget-label img{
+    width: 35px;
+}
+
+.planet-thumb{
+    -webkit-clip-path: circle(37% at 50% 50%);
+    width: 50%;
+}
+
+.player-banner{
+    width: 40px !important;
+    margin-bottom: 10px;
+}
+
+.player-counters{
+    width: 66%;
+}

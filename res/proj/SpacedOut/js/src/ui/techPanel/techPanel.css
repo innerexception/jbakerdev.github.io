@@ -1,0 +1,72 @@
+.tech-panel{
+    transition: top 1s, opacity 1s;
+    position: absolute;
+    width: 63% !important;
+    height: 150px !important;
+    background-color: black;
+}
+
+.slider-panel{
+    height: 60%;
+    margin-top: 20px;
+}
+
+.slider-panel input{
+    transform: rotate(-90deg);
+    display: inline-block !important;
+    width: 90px !important;
+    margin-top: 22px;
+}
+
+.slider-panel .locked input{
+
+}
+
+.slider-icons-panel{
+}
+
+.slider-icons-panel img{
+    padding-left: 54px;
+    height: 30px;
+}
+
+.techPanelOut{
+    opacity: 0;
+    left: 100%;
+}
+
+.techPanelIn{
+    opacity: 0.8;
+    left: 14%
+}
+
+.research-levels{
+    display: inline-block;
+}
+
+.research-levels img{
+    width: 20px;
+    margin-right: 10px;
+    vertical-align: bottom;
+}
+
+.research-levels div {
+    margin-bottom: 3px;
+}
+
+.research-label{
+    vertical-align: top;
+    margin-left: 2%;
+    margin-top: 4%;
+}
+
+.research-summary{
+    display: inline-block;
+    height: 100%;
+    vertical-align: top;
+}
+
+.locked {
+    opacity: 0.5;
+    pointer-events: none;
+}

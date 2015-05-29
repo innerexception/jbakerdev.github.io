@@ -1,0 +1,32 @@
+#taskBar{
+    transition: top 600ms;
+    position: absolute;
+    left: 25%;
+    top: -75px;
+}
+#taskBar:hover{
+    top: 8%;
+}
+
+.task-bar{
+    border: solid 1px white;
+    border-radius:3px;
+}
+
+.task-bar img{
+    transition: width 300ms;
+    display: inline-block;
+    padding: 15px;
+    width: 60px;
+    background-color: transparent;
+}
+
+.task-bar img:hover{
+    width: 70px;
+}
+
+.task-bar-arrow{
+    margin-left:40%;
+    opacity: 0.6;
+    width: 70px;
+}

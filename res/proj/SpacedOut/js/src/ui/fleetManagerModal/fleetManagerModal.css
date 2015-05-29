@@ -1,0 +1,48 @@
+.fleetModalIn{
+    opacity: 1;
+    height: calc(100% - 1px);
+}
+
+.fleetModalOut{
+    opacity: 0;
+    height: 1px;
+    pointer-events: none;
+}
+
+.fleet-modal-panel{
+    transition: height 1s, opacity 1s;
+    position: absolute;
+    left: 16%;
+    width: 40% !important;
+    top: 40%;
+    z-index: 1;
+}
+
+.fleet-buttons{
+    height:60%;
+    vertical-align: bottom;
+}
+.fleet-buttons img{
+    display: block;
+}
+
+.fleet-list{
+    vertical-align: top;
+    width: 42%;
+    height:95%;
+}
+.fleet-list img{
+    display: block;
+    margin-left:auto;
+    margin-right:auto;
+    width: 100%;
+}
+
+.new-fleet-list img{
+    width: 100%;
+}
+
+.new-fleet-list{
+    width:44%;
+    height:95%
+}

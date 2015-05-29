@@ -1,0 +1,44 @@
+<div class="inner-panel">
+    <div class="top-budget-labels">
+        <div class="inline">
+            <img class="player-banner" src="{{player.bannerPath}}"/>
+        </div>
+        <div class="inline player-counters">
+            <div class="inline">
+                <img class="inline" src="./js/res/img/icon-metal.png" />
+                <div class="inline"> {{player.metal}}</div>
+            </div>
+            <div class="inline">
+                <img class="inline" src="./js/res/img/icon_budget.png" />
+                <div class="inline"> {{player.money}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="top-sliders">
+        <div>
+            <img src="./js/res/img/icon_budget.png" />
+            <input id="capitalSlider" type="range" value="{{player.cashRate}}" on-change="onCapitalBudgetChanged" on-input="onCapitalBudgetChanged"/>
+        </div>
+        <div>
+            <img src="./js/res/img/icon_tech.png" />
+            <input id="techSlider" type="range" value="{{player.techRate}}" on-change="onTechBudgetChanged" on-input="onTechBudgetChanged"/>
+        </div>
+    </div>
+    <div class="well planet-well">
+        <div class="budget-label"><img src="./js/res/img/icon-gravity.png" /></div>
+        <div class="list-group">
+            {{#planets:i}}
+                {{>planetItem}}
+            {{/planets}}
+        </div>
+    </div>
+</div>
+
+
+<!-- {{>planetItem}} -->
+<div class="well">
+    <img class="planet-thumb" src="{{surfaceImagePath}}" />
+    <label for="{{name + 'slider'}}">{{name + ': '+ (budgetAmount)}}</label>
+    <input type="range" id="{{name + 'slider'}}" value="{{budgetPercent}}" on-input="onPlanetBudgetChanged" on-change="onPlanetBudgetChanged" />
+</div>
+<!-- {{/planetItem}} -->

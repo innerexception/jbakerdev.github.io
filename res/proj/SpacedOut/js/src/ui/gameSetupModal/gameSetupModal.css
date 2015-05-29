@@ -1,0 +1,19 @@
+.gameSetupIn{
+    transition: top 2s, opacity 2s;
+    top: 25%;
+    opacity: 1;
+}
+
+.gameSetupOut{
+    transition: top 2s, opacity 2s;
+    top: -200px;
+    opacity: 0;
+}
+
+.game-setup{
+    position: absolute;
+}
+
+button {
+    font-size: 10px !important;
+}

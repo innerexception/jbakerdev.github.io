@@ -1,0 +1,69 @@
+simperialism - A game of ideological warfare
+
+GameBoy 4 Bit
+
+
+TODO:
+	-Base view
+	-Special action animations / logic
+	-Sounds/music
+	-unique/leader unit limitations / gfx
+	-other province maps
+	-movement refinements
+
+
+
+Elements:
+	1. The map of Brazikstan (isometric?)
+		Province areas: red/gray/blue
+		Click to go to province view
+
+	2. The province view (top down)
+		You are the spirit of the revolution.
+			Inhabit one of
+				the intelligencia (beats oligarchs) (unique: Party Leader)
+				the military (beats intelligencia) (unique: Generalissimo)
+				the oligarchs (beats military) (unique: CEO)
+			Once you have your vessel, go forth to destroy the enemy base!
+				Speech: draw nearby drones to you
+
+			Engage in combat by proximity
+
+			The unique unit determines the minimum spawn rate for new units
+				Party Leader: min 50% intellectuals
+				Generalissimo: min 50% military
+				CEO: min 50% oligarchs
+			The unique unit cannot change unless killed or the REVOLUTION button is pressed
+			If REVOLUTION is used, you may select a new unique unit but your spawn rate is 0 for 2 minutes
+			Each subsequent revolution doubles the length of the no-spawn period
+			Killing the opposing unique unit will prevent them from spawning new units (it is usually in the base though)
+
+			The criminal element will interfere sometimes on the province view
+
+	3. The base view (side scroll)
+		Similar to province view, except side scroll perspective
+
+Required Assets:
+	1. Sprites:
+		-Blue shirt guy (intelligencia)
+		-Red shirt guy (military)
+		-Green shirt guy (oligarch)
+		-Province view tileset (two small cities with countryside)
+		-Map of Brazikstan (set of province shapes which fit together)
+		-Base view tileset
+		-Walk animation for guys
+		-Melee animation for guys
+		-Death animation for guys
+		-Shoot animation for military guy
+		-Bribe animation for oligarchs (vs military)
+		-Oratory animation for intelligencia (vs oligarchs)
+		-Party Leader sprite
+		-Generalissimo sprite
+		-CEO sprite
+	2. Audio
+		-Shoot
+		-Death
+		-Melee
+		-Select
+		-Speech
+		-Revolution

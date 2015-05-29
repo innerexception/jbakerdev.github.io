@@ -1,0 +1,22 @@
+.messagePanelIn{
+    top: 10px;
+    opacity: 0.8;
+}
+
+.messagePanelOut{
+    top: -100px;
+    opacity: 0;
+}
+
+.message-panel{
+    transition: top 1s, opacity 1s;
+    width: 240px !important;
+    height: 110px;
+    position: absolute;
+    left: 60%;
+}
+
+.message-scroll{
+    max-height: 90%;
+    overflow-y: scroll;
+}

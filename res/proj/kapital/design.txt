@@ -1,0 +1,114 @@
+1. Load main tileset (future dynamic)
+	-Also loads alternate levels
+	-Also loads consumption pickups on main level
+	-Both have exits to building levels with items
+	-Some building level has the Brass Ring in it
+2. Place player
+	-Generate sanity bar, with decrease. Refil with consumption drops
+	-Start position is in level tileset
+3. Place demons
+	-Begin wandering
+	-Start position is in level tileset
+	
+	
+Phase 1 Goal: DONE
+	-Display city with moveable player
+		Requirements:
+			1. Warped city tileset
+			2. Player spritesheet / entity
+			3. City collision layer
+Phase 2 Goal: DONE
+	-Phase 1 + Interior level transitions
+		Requirements:
+			1. Interior areas tileset
+			2. City tileset transition entities
+			3. Interior areas transition entities
+			4. Interior areas collision layer
+Phase 3 Goal: DONE
+	-Phase 2 + Demon (city) / NPCs (interior)
+		-Demon logic
+			-City tileset demon entity
+			-Retreat on interior area entry/shield
+		-Player death flow
+			-Death sprite and level reset stub
+		-NPC collisions
+			-Interior tileset npc entities
+Phase 4 Goal: DONE
+	-Phase 3 + Items/Effects and NPC movements (Castle LoLo style)
+Phase 5 Goal: 
+	-Phase 4 + Victory condition flow
+		-Whenever you die, show collected/remaining consumables.
+		-Boring way: Get the brass ring, do not get the tome, the demon avoids you.
+			-Game continues...sanity still degrades. Eventually you run out of consumables and die.
+		-Method 2: Collect all the consumables. You glow, then when touching the demon you destroy it and become a demon.
+		-Method 3: Find the tome. Do not pick up the brass ring. The demon will chase you regardless of distance
+			You are now equipped with flaming projectiles equal to the number of consumables collected.
+			Fire your flaming consumables at the demon to kill it, if you have enough and if you hit it. 
+			This causes time to stop and you appear in the normal world.
+Phase 6 Goal:
+	-Phase 5 + Game screen/state flow (up to now we are only using state.PLAY)
+		-Screen graphics
+Phase 7 Goal:
+	-Phase 6 + Multiple levels
+	-Flavor text points on levels
+Phase 8 Goal:
+	-Phase 7 + Audio DONE
+Phase 9 Goal:
+	-Phase 8 + Tileset/Animation Frosting
+	-Demon visual effects
+	-Use transparency instead of hud bar for sanity
+Phase 10 Goal:
+	-Phase 9 + Random level generator / multiple difficulty levels / normal city scripted introduction
+	
+	
+	
+	
+Current:
+1. Item/Special Item States + Creation logic
+2. Demon Sprite!!!
+3. Game Over screen
+4. Menu screen
+5. Parallax layers for play screen/other screens
+	
+	
+	
+	
+Content to create:
+
+Normal level tileset
+Building interior tileset
+Warped tileset
+
+Three city levels x 2 forms (normal/warped)
+10x room tilesets
+
+Player sprites
+	-up/down/left/right DONE
+	-die
+	-throw
+Demon sprites
+	-move (all same)
+	-rage/upset/angry
+Npc sprites DONE
+	-1 anonymous body for starters, animation for each pushed direction 
+Item sprites
+	-10 items, all static + flaming sprite
+
+The Special Items (in building rooms):
+	Brass Ring (Makes you invisible to the demon)
+	Blue Pills (Gives you double sanity, bar must empty twice, but you are slower)
+	DSMIV (Know demon location at all times)
+	GPS (Know your location at all times)
+	Therapy Book (Makes you immune to movement imparing effects)
+	silver Key
+	black Key
+	Gold Energy Tablet (Increased speed, reduced health by 1/2)
+
+The Consumption pickups (on the open map):
+	Money
+	White Pills
+	Coffee
+	Energy Drink
+	Netflix Envelope
+	PSX Controller
+	Meals

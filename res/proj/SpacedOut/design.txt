@@ -1,0 +1,24 @@
+out spaced - don't get pushed out of space
+
+1. Game setup
+    size
+    # players
+    AI level
+    shape
+    Player level
+2. Galaxy view
+    planets
+    traveling ships w/ lines
+2.1 Selected planet sidebar
+    pic
+    money
+    metal
+    temp
+    terra / mining slider
+2.2 budget sidebar
+    planets w/ budget slider each
+    saving / tech spending slider
+2.3 tech sidebar
+    slider for each tech category
+2.4 messages queue area
+3. battle view
