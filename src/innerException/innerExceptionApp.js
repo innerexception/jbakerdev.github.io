@@ -1,4 +1,4 @@
-define(['ractive', 'rv!./src/innerExceptionApp/innerExceptionAppTemplate.html', 'css!./src/innerExceptionApp/innerExceptionAppStyles'],
+define(['ractive', 'rv!/src/innerExceptionApp/innerExceptionAppTemplate', 'css!/src/innerExceptionApp/innerExceptionAppStyles'],
     function(Ractive, innerExceptionAppTemplate){
 
         var innerExceptionApp = function(containerDomId){
