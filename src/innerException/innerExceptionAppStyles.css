@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Press Start 2P);
+@import url(http://fonts.googleapis.com/css?family=Press+Start+2P);
 
 html {
     height: 100%;
@@ -98,29 +98,29 @@ img:last-of-type {
 }
 
 #title {
-    background-image: url("http://lorempixel.com/output/abstract-q-c-640-480-6.jpg");
+    background-image: url("./res/img/title.jpg");
     background-attachment: fixed;
 }
 
 #slide1:before {
-    background-image: url("http://lorempixel.com/output/abstract-q-c-640-480-4.jpg");
+    background-image: url("./res/img/world.jpg");
     transform: translateZ(-1px) scale(2);
     z-index:-1;
 }
 
 #slide2 {
-    background-image: url("http://lorempixel.com/output/abstract-q-c-640-480-3.jpg");
+    background-image: url("./res/img/where.jpg");
     background-attachment: fixed;
 }
 
 #slide3:before {
-    background-image: url("http://lorempixel.com/output/abstract-q-c-640-480-5.jpg");
+    background-image: url("./res/img/birds.jpg");
     transform: translateZ(-1px) scale(2);
     z-index:-1;
 }
 
 #slide4:before {
-    background-image: url("http://lorempixel.com/output/abstract-q-c-640-480-5.jpg");
+    background-image: url("./res/img/business.gif");
     transform: translateZ(-1px) scale(2);
     z-index:-1;
 }
