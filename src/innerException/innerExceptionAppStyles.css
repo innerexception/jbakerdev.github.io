@@ -98,29 +98,29 @@ img:last-of-type {
 }
 
 #title {
-    background-image: url("./res/img/title.jpg");
+    background-image: url("../../res/img/title.jpg");
     background-attachment: fixed;
 }
 
 #slide1:before {
-    background-image: url("./res/img/world.jpg");
+    background-image: url("../../res/img/world.jpg");
     transform: translateZ(-1px) scale(2);
     z-index:-1;
 }
 
 #slide2 {
-    background-image: url("./res/img/where.jpg");
+    background-image: url("../../res/img/where.jpg");
     background-attachment: fixed;
 }
 
 #slide3:before {
-    background-image: url("./res/img/birds.jpg");
+    background-image: url("../../res/img/birds.jpg");
     transform: translateZ(-1px) scale(2);
     z-index:-1;
 }
 
 #slide4:before {
-    background-image: url("./res/img/business.gif");
+    background-image: url("../../res/img/business.gif");
     transform: translateZ(-1px) scale(2);
     z-index:-1;
 }
