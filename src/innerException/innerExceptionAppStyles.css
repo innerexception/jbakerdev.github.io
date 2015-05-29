@@ -47,10 +47,6 @@ video{
     box-shadow: 0 0 8px rgba(0, 0, 0, .7);
 }
 
-img:last-of-type {
-    transform: translateZ(.4px) scale(.6) translateX(-104%) translateY(-40%) rotate(-5deg);
-}
-
 .slide:before {
     content: "";
     position: absolute;
@@ -121,10 +117,11 @@ img:last-of-type {
 
 #slide4:before {
     background-image: url("../../res/img/business.gif");
-    transform: translateZ(-1px) scale(2);
+    transform: translateZ(0px) scale(1);
     z-index:-1;
 }
 
 #slide5 {
     background: #222;
+    position:static;
 }
