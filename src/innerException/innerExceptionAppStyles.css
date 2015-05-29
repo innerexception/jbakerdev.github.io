@@ -13,7 +13,7 @@ body {
     height: 100%;
     overflow-y: scroll;
     overflow-x: hidden;
-    font-family: "Press Start 2P";
+    font-family: 'Press Start 2P';
 }
 
 h1 {
@@ -36,10 +36,8 @@ p {
     transform-style: inherit;
 }
 
-img {
+video{
     position: absolute;
-    top: 50%;
-    left: 35%;
     width: 320px;
     height: 240px;
     transform: translateZ(.25px) scale(.75) translateX(-94%) translateY(-100%) rotate(2deg);
@@ -78,6 +76,14 @@ img:last-of-type {
 .slide:nth-child(2n+1) .title {
     margin-left: auto;
     margin-right: 0;
+}
+
+.slide:nth-child(2n) video {
+    left: 75%;
+}
+
+.slide:nth-child(2n+1) video {
+    left: 35%;
 }
 
 .slide, .slide:before {
