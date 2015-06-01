@@ -16,18 +16,19 @@ body {
     font-family: 'Press Start 2P';
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 1000px) {
     h1 {
         font-size: 90%;
         max-width: 90%;
         overflow-wrap: break-word;
+        text-align: center;
     }
-    video{
+    iframe{
         position: absolute;
-        width: 200px;
-        height: 150px;
-        margin-left: 10%;
-        transform: translateZ(.25px) scale(.75);
+        width: 60%;
+        height: 50%;
+        margin-left: 8%;
+        transform: scale(.75) ;
         padding: 10px;
         border-radius: 5px;
         background: rgba(240,230,220, .7);
@@ -40,31 +41,34 @@ body {
         border-radius: 5px;
         background: rgba(240,230,220, .7);
         box-shadow: 0 0 8px rgba(0, 0, 0, .7);
+        transform: translateZ(.25px) scale(.60);
     }
 }
 
-@media screen and (min-width: 700px) {
+@media screen and (min-width: 1000px) {
     h1 {
         font-size: 200%;
         max-width: 90%;
         overflow-wrap: break-word;
+        text-align: center;
     }
-    video{
+    iframe{
         position: absolute;
         width: 320px;
         height: 240px;
-        transform: translateZ(.25px) scale(.75) translateX(-94%) translateY(-100%);
         padding: 10px;
         border-radius: 5px;
         background: rgba(240,230,220, .7);
         box-shadow: 0 0 8px rgba(0, 0, 0, .7);
     }
-    .slide:nth-child(2n) video {
-        left: 80%;
+    .slide:nth-child(2n) iframe {
+        left: 53%;
+        top:20%;
     }
 
-    .slide:nth-child(2n+1) video {
-        left: 36%;
+    .slide:nth-child(2n+1) iframe {
+        left: 15%;
+        top: 15%;
     }
 
     .slide:nth-child(2n) .title {
@@ -82,6 +86,7 @@ body {
         border-radius: 5px;
         background: rgba(240,230,220, .7);
         box-shadow: 0 0 8px rgba(0, 0, 0, .7);
+        transform: translateZ(.25px) scale(.60);
     }
 }
 

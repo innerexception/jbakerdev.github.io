@@ -77,13 +77,15 @@ define(['player', 'room', 'lodash', 'candy'], function(Player, Room, _, Candy){
            }
 
            this.drawOverlay();
-           this.drawHealth();
+           if(this.isRunning){
+               this.drawHealth();
 
-           _.each(this.rooms, function(room){
-               room.update();
-           });
+               _.each(this.rooms, function(room){
+                   room.update();
+               });
 
-           this.updateCamera();
+               this.updateCamera();
+           }
        },
        shakeCamera: function(frequency, strength, duration){
            if(!this.phaserInstance.camera.viewTween.isRunning){
@@ -103,7 +105,7 @@ define(['player', 'room', 'lodash', 'candy'], function(Player, Room, _, Candy){
            }
            this.overlayCtx.endFill();
            this.overlayCtx.beginFill(Candy.gameBoyPalette.extraDarkBlueGreenHex, Math.max(1-this.player.hp/this.player.maxHp, 0.2));
-           this.overlayCtx.drawRect(0,0,this.phaserInstance.world.width, this.phaserInstance.world.height);
+           this.overlayCtx.drawRect(0,0,this.phaserInstance.world.width*2, this.phaserInstance.world.height*2);
            this.overlayCtx.endFill();
        },
 
@@ -112,16 +114,16 @@ define(['player', 'room', 'lodash', 'candy'], function(Player, Room, _, Candy){
            var camera = this.phaserInstance.camera;
 
            if(pointerPosition.x >= 600 && camera.x <= 900){
-               camera.view.x+=5;
+               camera.x+=5;
            }
            if(pointerPosition.y >= 420 && camera.y <= 900){
-               camera.view.y+=5;
+               camera.y+=5;
            }
            if(pointerPosition.x < 25 && camera.x > 0){
-               camera.view.x-=5;
+               camera.x-=5;
            }
            if(pointerPosition.y < 25 && camera.y > 0) {
-               camera.view.y -= 5;
+               camera.y -= 5;
            }
 
        },

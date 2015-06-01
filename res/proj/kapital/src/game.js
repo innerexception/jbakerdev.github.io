@@ -59,10 +59,10 @@ define(['candy', 'worldMap'], function(Candy, WorldMap){
 
         phaserLoad: function () {
             //1st time load
-            this.world.setBounds(0, 0, 1000, 1000);
+            this.world.setBounds(0, 0, 600,600);
             //Camera init
             this.camera.deadzone = new Phaser.Rectangle(150, 150, 500, 300);
-            this.camera.view = new Phaser.Rectangle(150, 150, 500, 300);
+            this.camera.view = new Phaser.Rectangle(0, 0, 500, 300);
             this.physics.startSystem(Phaser.Physics.ARCADE);
             this.loadComplete.dispatch();
         },
@@ -92,6 +92,7 @@ define(['candy', 'worldMap'], function(Candy, WorldMap){
 
         startNewGame: function () {
             Candy.clearIntro(this.gameInstance);
+            this.gameInstance.worldMap.isRunning = true;
             this.gameInstance.worldMap.transitionTo();
         }
     };
