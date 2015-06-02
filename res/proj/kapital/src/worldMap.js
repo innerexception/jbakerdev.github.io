@@ -40,7 +40,7 @@ define(['player', 'room', 'lodash', 'candy'], function(Player, Room, _, Candy){
        this.drawCtx = phaserInstance.add.graphics(0,0);
        this.drawCtx.hp = 0;
 
-       this.rainEmitter = phaserInstance.add.emitter(phaserInstance.world.centerX, 0, 10000);
+       this.rainEmitter = phaserInstance.add.emitter(phaserInstance.world.centerX, 0, 1000);
        this.rainEmitter.makeParticles('rain');
        this.rainEmitter.width = phaserInstance.world.width;
        this.rainEmitter.minParticleScale = 0.5;
@@ -76,16 +76,15 @@ define(['player', 'room', 'lodash', 'candy'], function(Player, Room, _, Candy){
 
                }
            }
+           else{
+               _.each(this.rooms, function(room){
+                   room.update();
+               });
+           }
 
            this.drawOverlay();
            if(this.isRunning){
                this.drawHealth();
-
-               _.each(this.rooms, function(room){
-                   room.update();
-               });
-
-               //this.updateCamera();
            }
        },
        shakeCamera: function(frequency, strength, duration){
@@ -108,25 +107,6 @@ define(['player', 'room', 'lodash', 'candy'], function(Player, Room, _, Candy){
            this.overlayCtx.beginFill(Candy.gameBoyPalette.extraDarkBlueGreenHex, Math.max(1-this.player.hp/this.player.maxHp, 0.2));
            this.overlayCtx.drawRect(0,0,this.phaserInstance.world.width*2, this.phaserInstance.world.height*2);
            this.overlayCtx.endFill();
-       },
-
-       updateCamera: function(){
-           //var pointerPosition = this.phaserInstance.input.mousePointer.position;
-           //var camera = this.phaserInstance.camera;
-           // debugger;
-           //if(pointerPosition.x >= this.phaserInstance.width-50 && camera.x <= this.phaserInstance.world.width-50){
-           //    camera.x+=5;
-           //}
-           //if(pointerPosition.y >= 420 && camera.y <= 900){
-           //    camera.y+=5;
-           //}
-           //if(pointerPosition.x < 25 && camera.x > 0){
-           //    camera.x-=5;
-           //}
-           //if(pointerPosition.y < 25 && camera.y > 0) {
-           //    camera.y -= 5;
-           //}
-
        },
        drawHealth: function(){
            if(this.player.hp != this.drawCtx.hp){
@@ -187,8 +167,8 @@ define(['player', 'room', 'lodash', 'candy'], function(Player, Room, _, Candy){
                var newItemData = this.getRandomItemData();
                var item = this.items.create(newItemData.x, newItemData.y, newItemData.sprite);
                item.itemType = newItemData.itemType;
-               item.scale.x = 0.5;
-               item.scale.y = 0.5;
+               item.scale.x = 0.4;
+               item.scale.y = 0.4;
            }
            this.items.transitionTo.start();
        },
