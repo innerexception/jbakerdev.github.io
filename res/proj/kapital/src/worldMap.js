@@ -28,6 +28,7 @@ define(['player', 'room', 'lodash', 'candy'], function(Player, Room, _, Candy){
        this.groundTileSet.setCollisionBetween(15,16, true, 'ground', true);
        this.groundTileSet.setCollisionBetween(81,99, true, 'doors', true);
        this.player = new Player(phaserInstance, 100, 100);
+       this.phaserInstance.camera.follow(this.player.sprite);
        this.items = phaserInstance.add.group();
        this.items.alpha = 0;
        this.items.transitionTo = phaserInstance.add.tween(this.items)
@@ -39,7 +40,7 @@ define(['player', 'room', 'lodash', 'candy'], function(Player, Room, _, Candy){
        this.drawCtx = phaserInstance.add.graphics(0,0);
        this.drawCtx.hp = 0;
 
-       this.rainEmitter = phaserInstance.add.emitter(phaserInstance.world.centerX, 0, 1000);
+       this.rainEmitter = phaserInstance.add.emitter(phaserInstance.world.centerX, 0, 10000);
        this.rainEmitter.makeParticles('rain');
        this.rainEmitter.width = phaserInstance.world.width;
        this.rainEmitter.minParticleScale = 0.5;
@@ -84,7 +85,7 @@ define(['player', 'room', 'lodash', 'candy'], function(Player, Room, _, Candy){
                    room.update();
                });
 
-               this.updateCamera();
+               //this.updateCamera();
            }
        },
        shakeCamera: function(frequency, strength, duration){
@@ -110,21 +111,21 @@ define(['player', 'room', 'lodash', 'candy'], function(Player, Room, _, Candy){
        },
 
        updateCamera: function(){
-           var pointerPosition = this.phaserInstance.input.mousePointer.position;
-           var camera = this.phaserInstance.camera;
-
-           if(pointerPosition.x >= 600 && camera.x <= 900){
-               camera.x+=5;
-           }
-           if(pointerPosition.y >= 420 && camera.y <= 900){
-               camera.y+=5;
-           }
-           if(pointerPosition.x < 25 && camera.x > 0){
-               camera.x-=5;
-           }
-           if(pointerPosition.y < 25 && camera.y > 0) {
-               camera.y -= 5;
-           }
+           //var pointerPosition = this.phaserInstance.input.mousePointer.position;
+           //var camera = this.phaserInstance.camera;
+           // debugger;
+           //if(pointerPosition.x >= this.phaserInstance.width-50 && camera.x <= this.phaserInstance.world.width-50){
+           //    camera.x+=5;
+           //}
+           //if(pointerPosition.y >= 420 && camera.y <= 900){
+           //    camera.y+=5;
+           //}
+           //if(pointerPosition.x < 25 && camera.x > 0){
+           //    camera.x-=5;
+           //}
+           //if(pointerPosition.y < 25 && camera.y > 0) {
+           //    camera.y -= 5;
+           //}
 
        },
        drawHealth: function(){

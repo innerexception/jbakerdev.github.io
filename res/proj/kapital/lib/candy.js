@@ -106,18 +106,18 @@ define(['phaser'], function(Phaser){
     };
 
     Candy.drawIntro = function(phaserInstance){
-        Candy.logo = phaserInstance.add.text(400, 0, "kapital");
-        Candy.setTextProps(Candy.logo, {fontSiez:48});
+        Candy.logo = phaserInstance.add.text(150, 0, "kapital");
+        Candy.setTextProps(Candy.logo, {fontSiez:24});
 
         Candy.logo.bounce = phaserInstance.add.tween(Candy.logo);
-        Candy.logo.bounce.to({y: phaserInstance.world.height / 4}, 3500, Phaser.Easing.Linear.None);
+        Candy.logo.bounce.to({y: phaserInstance.world.height / 5}, 3500, Phaser.Easing.Linear.None);
         Candy.logo.bounce.start();
 
-        Candy.logoSub = phaserInstance.add.text(400, 40, "CLICK TO START");
-        Candy.setTextProps(Candy.logoSub, {fontSiez: 32});
+        Candy.logoSub = phaserInstance.add.text(150, 40, "CLICK TO START");
+        Candy.setTextProps(Candy.logoSub, {fontSiez: 18});
 
         Candy.logoSub.bounce = phaserInstance.add.tween(Candy.logoSub);
-        Candy.logoSub.bounce.to({y: phaserInstance.world.height / 3}, 3500, Phaser.Easing.Linear.None);
+        Candy.logoSub.bounce.to({y: phaserInstance.world.height / 4}, 3500, Phaser.Easing.Linear.None);
         Candy.logoSub.bounce.start();
     };
 

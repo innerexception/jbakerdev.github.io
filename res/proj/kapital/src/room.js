@@ -33,11 +33,13 @@ define([], function(){
         this.groundTileSet.setCollisionBetween(28,28, true, 'doors', true);
 
         this.player = player;
+        this.player.originalX = this.player.sprite.x-25;
+        this.player.originalY = this.player.sprite.y-25;
         this.player.sprite.x = 100;
         this.player.sprite.y = 100;
         this.player.sprite.bringToTop();
 
-        this.spawnInitialItems();
+        this.spawnItem();
         this.spawnNpcs();
     };
 
@@ -54,6 +56,9 @@ define([], function(){
             this.doodadsLayer.transitionFrom.start();
             this.doorwaysLayer.transitionFrom.start();
             this.items.transitionFrom.start();
+            this.player.sprite.x = this.player.originalX;
+            this.player.sprite.y = this.player.originalY;
+
             nextTransitionDelegate.apply(context);
         },
         update: function(){
@@ -71,7 +76,7 @@ define([], function(){
         playerHitDoor: function(playerSprite, doorSprite){
             this.transitionFrom(this.enteredFrom.transitionTo, this.enteredFrom);
         },
-        spawnInitialItems: function(){
+        spawnItem: function(){
 
         },
         spawnNpcs: function(){

@@ -1,7 +1,7 @@
 require.config({
     baseUrl: '',
     paths:{
-        'phaser': 'lib/phaser',
+        'phaser': 'lib/phaser2.2.2',
         'lodash': 'lib/lodash.min',
         'candy': 'lib/candy',
         'kapitalApp': 'src/game',
@@ -18,7 +18,7 @@ require.config({
 });
 
 require(['phaser', 'kapitalApp'], function(Phaser, KapitalApp){
-    new KapitalApp(640, 480, Phaser.AUTO, 'appRoot');
+    new KapitalApp(320, 240, Phaser.AUTO, 'appRoot');
 });
 
 

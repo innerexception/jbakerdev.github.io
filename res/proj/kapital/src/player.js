@@ -12,7 +12,7 @@ define([], function(){
        update: function(){
            if(this.phaserInstance.input.activePointer.isDown){
                this.phaserInstance.physics.arcade.accelerateToPointer(this.sprite, null, 60, 60, 60);
-               this.hp-=0.1;
+               this.hp-=0.01;
            }
            else{
                this.sprite.body.velocity.x = 0;
