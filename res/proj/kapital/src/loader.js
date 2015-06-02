@@ -8,7 +8,8 @@ require.config({
         'worldMap': 'src/worldMap',
         'player': 'src/player',
         'room': 'src/room',
-        'npc': 'src/npc'
+        'npc': 'src/npc',
+        'demon': 'src/demon'
     },
     shim: {
         'phaser': {

@@ -1,4 +1,4 @@
-define(['player', 'room', 'lodash', 'candy'], function(Player, Room, _, Candy){
+define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _, Candy, Demon){
    var worldMap = function(phaserInstance){
        this.rooms = [];
        this.phaserInstance = phaserInstance;
@@ -53,7 +53,7 @@ define(['player', 'room', 'lodash', 'candy'], function(Player, Room, _, Candy){
        this.rainEmitter.maxRotation = 0;
        this.rainEmitter.particleBringToTop = true;
        this.rainEmitter.start(false, 1500, 1);
-       //this.demon = new Demon(phaserInstance, 200, 200);
+       this.demon = new Demon(this.phaserInstance.add.sprite(200, 200, 'player'), this.player.sprite, this.phaserInstance);
 
        this.overlayCtx = phaserInstance.add.graphics(0,0);
 
@@ -65,16 +65,13 @@ define(['player', 'room', 'lodash', 'candy'], function(Player, Room, _, Candy){
    worldMap.prototype = {
        update: function(){
 
-           //this.demon.update();
+           this.demon.update();
            if(!this.player.inRoom){
                this.phaserInstance.physics.arcade.overlap(this.player.sprite, this.doorwaysLayer, this.playerEnteredDoor, null, this);
                this.phaserInstance.physics.arcade.overlap(this.player.sprite, this.items, this.playerHitItem, null, this);
                this.phaserInstance.physics.arcade.collide(this.player.sprite, this.doodadsLayer);
                this.phaserInstance.physics.arcade.collide(this.player.sprite, this.groundLayer);
                this.player.update();
-               if(this.player.hp != this.drawCtx.hp){
-
-               }
            }
            else{
                _.each(this.rooms, function(room){
@@ -112,10 +109,10 @@ define(['player', 'room', 'lodash', 'candy'], function(Player, Room, _, Candy){
            if(this.player.hp != this.drawCtx.hp){
                this.drawCtx.clear();
                this.drawCtx.beginFill(Candy.gameBoyPalette.lightBrownHex, 1);
-               this.drawCtx.drawRoundedRect(this.phaserInstance.camera.view.x+22, this.phaserInstance.camera.view.y + 415, this.player.maxHp+10, 35, 5);
+               this.drawCtx.drawRoundedRect(this.phaserInstance.camera.view.x+20, this.phaserInstance.camera.view.y + this.phaserInstance.camera.view.height-25 , this.player.maxHp+10, 15, 3);
                this.drawCtx.endFill();
                this.drawCtx.beginFill(Candy.gameBoyPalette.darkBrownHex, 0.5);
-               this.drawCtx.drawRect(this.phaserInstance.camera.view.x+25, this.phaserInstance.camera.view.y + 420, this.drawCtx.hp, 25);
+               this.drawCtx.drawRect(this.phaserInstance.camera.view.x+25, this.phaserInstance.camera.view.y + this.phaserInstance.camera.view.height-20, this.drawCtx.hp, 5);
                this.drawCtx.endFill();
                this.player.hp > this.drawCtx.hp ? this.drawCtx.hp++ : this.drawCtx.hp--;
            }
