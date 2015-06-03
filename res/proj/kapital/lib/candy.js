@@ -136,6 +136,19 @@ define(['phaser'], function(Phaser){
         }, this);
     };
 
+    Candy.shakeCamera = function(frequency, strength, duration, player, phaserInstance){
+        phaserInstance.camera.unfollow(player.sprite);
+        if(!phaserInstance.camera.viewTween.isRunning){
+            console.log('shakin');
+            phaserInstance.camera.viewTween = phaserInstance.add.tween(phaserInstance.camera)
+                .to({x:phaserInstance.camera.x+strength, y:phaserInstance.camera.y+strength}, frequency, Phaser.Easing.Linear.None)
+                .to({x:phaserInstance.camera.x-strength, y:phaserInstance.camera.y-strength}, frequency, Phaser.Easing.Linear.None)
+                .repeat(duration);
+            phaserInstance.camera.viewTween.onComplete.addOnce(function(){ phaserInstance.camera.follow(player.sprite);}.bind(this));
+            phaserInstance.camera.viewTween.start();
+        }
+    };
+
     return Candy;
 
 });

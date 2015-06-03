@@ -30,7 +30,7 @@ define(['lodash', 'npc'], function(_, Npc){
 
         this.player = player;
         this.player.originalX = this.player.sprite.x;
-        this.player.originalY = this.player.sprite.y+25;
+        this.player.originalY = this.player.sprite.y+15;
         this.player.sprite.x = 100;
         this.player.sprite.y = 100;
         this.player.sprite.bringToTop();
@@ -45,14 +45,12 @@ define(['lodash', 'npc'], function(_, Npc){
             this.doodadsLayer.transitionTo.start();
             this.doorwaysLayer.transitionTo.start();
             this.npcs.transitionTo.start();
-            this.items.transitionTo.start();
         },
         transitionFrom: function(nextTransitionDelegate, context){
             this.player.inRoom = false;
             this.groundLayer.transitionFrom.start();
             this.doodadsLayer.transitionFrom.start();
             this.doorwaysLayer.transitionFrom.start();
-            this.items.transitionFrom.start();
             this.npcs.transitionFrom.start();
             this.player.sprite.x = this.player.originalX;
             this.player.sprite.y = this.player.originalY;
@@ -69,10 +67,9 @@ define(['lodash', 'npc'], function(_, Npc){
                 this.phaserInstance.physics.arcade.overlap(this.player.sprite, this.doorwaysLayer, this.playerHitDoor, null, this);
                 this.phaserInstance.physics.arcade.collide(this.player.sprite, this.doodadsLayer);
                 this.phaserInstance.physics.arcade.collide(this.player.sprite, this.groundLayer);
-                this.phaserInstance.physics.arcade.collide(this.npcs, this.doodadsLayer, this.hitWall, null, this);
-                this.phaserInstance.physics.arcade.collide(this.npcs, this.groundLayer, this.hitWall, null, this);
+                this.phaserInstance.physics.arcade.overlap(this.npcs, this.doodadsLayer, this.hitWall, null, this);
+                this.phaserInstance.physics.arcade.overlap(this.npcs, this.groundLayer, this.hitWall, null, this);
             }
-
         },
         hitWall: function(npcSprite){
             console.log('npc wall hit');
@@ -98,12 +95,7 @@ define(['lodash', 'npc'], function(_, Npc){
             this.transitionFrom(this.enteredFrom.transitionTo, this.enteredFrom);
         },
         spawnItem: function(){
-            this.items = this.phaserInstance.add.group();
-            this.items.transitionTo = this.phaserInstance.add.tween(this.items)
-                .to({alpha:1}, 2000, Phaser.Easing.Linear.None);
-            this.items.transitionFrom = this.phaserInstance.add.tween(this.items)
-                .to({alpha:0}, 2000, Phaser.Easing.Linear.None);
-            this.items.enableBody = true;
+
         },
         spawnNpcs: function(){
             this.npcs = this.phaserInstance.add.group();

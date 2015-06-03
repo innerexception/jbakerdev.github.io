@@ -9,16 +9,16 @@ define([], function(){
         update: function(){
             switch(this.sprite.direction){
                 case 'south':
-                    this.sprite.y += 0.1;
+                    this.sprite.body.velocity.y = 2;
                     break;
                 case 'north':
-                    this.sprite.y -= 0.1;
+                    this.sprite.body.velocity.y = -2;
                     break;
                 case 'east':
-                    this.sprite.x += 0.1;
+                    this.sprite.body.velocity.x = 2;
                     break;
                 case 'west':
-                    this.sprite.x -= 0.1;
+                    this.sprite.body.velocity.x = -2;
                     break;
             }
         }

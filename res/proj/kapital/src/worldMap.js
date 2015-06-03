@@ -28,7 +28,6 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
        this.groundTileSet.setCollisionBetween(15,16, true, 'ground', true);
        this.groundTileSet.setCollisionBetween(81,99, true, 'doors', true);
        this.player = new Player(phaserInstance, 100, 100);
-       this.phaserInstance.camera.follow(this.player.sprite);
        this.items = phaserInstance.add.group();
        this.items.alpha = 0;
        this.items.transitionTo = phaserInstance.add.tween(this.items)
@@ -60,7 +59,7 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
 
        this.phaserInstance.camera.viewTween = {};
 
-       this.shakeCamera(50, 2, 10);
+       Candy.shakeCamera(50, 2, 10, this.player, this.phaserInstance);
    };
 
    worldMap.prototype = {
@@ -119,16 +118,6 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
                .to({alpha: 0}, 3000)
                .to({alpha: 1}, 3000)
                .loop();
-       },
-       shakeCamera: function(frequency, strength, duration){
-           if(!this.phaserInstance.camera.viewTween.isRunning){
-               console.log('shakin');
-               this.phaserInstance.camera.viewTween = this.phaserInstance.add.tween(this.phaserInstance.camera)
-                   .to({x:this.phaserInstance.camera.x+strength, y:this.phaserInstance.camera.y+strength}, frequency, Phaser.Easing.Linear.None)
-                   .to({x:this.phaserInstance.camera.x-strength, y:this.phaserInstance.camera.y-strength}, frequency, Phaser.Easing.Linear.None)
-                   .repeat(duration);
-               this.phaserInstance.camera.viewTween.start();
-           }
        },
        drawOverlay: function(){
            this.overlayCtx.clear();
