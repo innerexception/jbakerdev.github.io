@@ -53,7 +53,8 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
        this.rainEmitter.maxRotation = 0;
        this.rainEmitter.particleBringToTop = true;
        this.rainEmitter.start(false, 1500, 1);
-       this.demon = new Demon(this.phaserInstance.add.sprite(200, 200, 'player'), this.player.sprite, this.phaserInstance);
+
+       this.spawnDemon();
 
        this.overlayCtx = phaserInstance.add.graphics(0,0);
 
@@ -83,6 +84,41 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
            if(this.isRunning){
                this.drawHealth();
            }
+       },
+       spawnDemon: function(){
+           var demonStartPoint = {x: 200, y:200};
+           var demonOffset = 2;
+           var demonSpriteGroup = this.phaserInstance.add.group();
+           demonSpriteGroup.enableBody = true;
+           demonSpriteGroup.add(this.phaserInstance.add.sprite(demonStartPoint.x, demonStartPoint.y, 'player'));
+
+           var temp = this.phaserInstance.add.sprite(demonStartPoint.x, demonStartPoint.y, 'player');
+           temp.tween = this.getTweenWithOffset(temp);
+           demonSpriteGroup.add(temp);
+           temp.tween.start();
+
+           temp = this.phaserInstance.add.sprite(demonStartPoint.x+demonOffset, demonStartPoint.y-demonOffset, 'player');
+           temp.tween = this.getTweenWithOffset(temp);
+           demonSpriteGroup.add(temp);
+           temp.tween.start();
+
+           temp = this.phaserInstance.add.sprite(demonStartPoint.x-demonOffset, demonStartPoint.y+demonOffset, 'player');
+           temp.tween = this.getTweenWithOffset(temp);
+           demonSpriteGroup.add(temp);
+           temp.tween.start();
+
+           temp = this.phaserInstance.add.sprite(demonStartPoint.x-demonOffset, demonStartPoint.y-demonOffset, 'player');
+           temp.tween = this.getTweenWithOffset(temp);
+           demonSpriteGroup.add(temp);
+           temp.tween.start();
+
+           this.demon = new Demon(demonSpriteGroup, this.player, this.phaserInstance);
+       },
+       getTweenWithOffset: function(sprite){
+           return this.phaserInstance.add.tween(sprite)
+               .to({alpha: 0}, 3000)
+               .to({alpha: 1}, 3000)
+               .loop();
        },
        shakeCamera: function(frequency, strength, duration){
            if(!this.phaserInstance.camera.viewTween.isRunning){
