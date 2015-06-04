@@ -6,13 +6,14 @@ define([], function(){
        this.phaserInstance.physics.enable(this.sprite);
        this.hp = 100;
        this.maxHp = 100;
+       this.itemSprites = [];
    };
 
    player.prototype = {
        update: function(){
            if(this.phaserInstance.input.activePointer.isDown){
                this.phaserInstance.physics.arcade.accelerateToPointer(this.sprite, null, 60, 60, 60);
-               this.hp-=0.01;
+               if(!this.inRoom) this.hp-=0.01;
            }
            else{
                this.sprite.body.velocity.x = 0;

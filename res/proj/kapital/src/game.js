@@ -53,6 +53,7 @@ define(['candy', 'worldMap'], function(Candy, WorldMap){
             this.load.tilemap('room_tiles', 'res/map/testInterior.json', null, Phaser.Tilemap.TILED_JSON);
 
             this.load.spritesheet('player', 'res/sprite/player_sprites.png', 16, 16);
+            this.load.spritesheet('chest', 'res/sprite/chest_sprites.png', 16, 16);
             //  Load the Google WebFont Loader script
             this.load.script('webfont', '//ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js');
         },

@@ -1,6 +1,7 @@
 define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _, Candy, Demon){
    var worldMap = function(phaserInstance){
        this.rooms = [];
+       this.heldItems = [];
        this.phaserInstance = phaserInstance;
        this.groundTileSet = phaserInstance.add.tilemap('ground_tiles', 16, 16);
        this.groundTileSet.addTilesetImage('ground', 'ground');
@@ -27,7 +28,7 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
        this.groundTileSet.setCollisionBetween(81,99, true, 'ground_doodads', true);
        this.groundTileSet.setCollisionBetween(15,16, true, 'ground', true);
        this.groundTileSet.setCollisionBetween(81,99, true, 'doors', true);
-       this.player = new Player(phaserInstance, 100, 100);
+       this.player = new Player(phaserInstance, 200, 200);
        this.items = phaserInstance.add.group();
        this.items.alpha = 0;
        this.items.transitionTo = phaserInstance.add.tween(this.items)
@@ -65,13 +66,16 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
    worldMap.prototype = {
        update: function(){
 
-           this.demon.update();
            if(!this.player.inRoom){
+               this.demon.update();
                this.phaserInstance.physics.arcade.overlap(this.player.sprite, this.doorwaysLayer, this.playerEnteredDoor, null, this);
                this.phaserInstance.physics.arcade.overlap(this.player.sprite, this.items, this.playerHitItem, null, this);
                this.phaserInstance.physics.arcade.collide(this.player.sprite, this.doodadsLayer);
                this.phaserInstance.physics.arcade.collide(this.player.sprite, this.groundLayer);
                this.player.update();
+               if(this.player.hp <= 0){
+                   this.runLoss();
+               }
            }
            else{
                _.each(this.rooms, function(room){
@@ -81,7 +85,13 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
 
            this.drawOverlay();
            if(this.isRunning){
-               this.drawHealth();
+               if(this.player.inRoom){
+                   this.drawHeldItems();
+               }
+               else{
+                   this.drawHeldItems();
+                   this.drawHealth();
+               }
            }
        },
        spawnDemon: function(){
@@ -142,6 +152,30 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
                this.player.hp > this.drawCtx.hp ? this.drawCtx.hp++ : this.drawCtx.hp--;
            }
        },
+       drawHeldItems: function(){
+           if(this.player.itemSpritesDirty){
+               _.each(this.heldItems, function(item){
+                   item.kill();
+               });
+               var i=0;
+               _.each(this.player.itemSprites, function(spriteKey){
+                   var itemSprite=this.phaserInstance.add.sprite(this.phaserInstance.camera.view.x+150 + (i*20), this.phaserInstance.camera.view.y + this.phaserInstance.camera.view.height-30, spriteKey);
+                   itemSprite.scale.setTo(0.5);
+                   this.heldItems.push(itemSprite);
+                   i++;
+               }, this);
+
+               this.player.itemSpritesDirty = false;
+           }
+           else{
+               var i=0;
+               _.each(this.heldItems, function(item){
+                   item.x = this.phaserInstance.camera.view.x+150 + (i*20);
+                   item.y = this.phaserInstance.camera.view.y + this.phaserInstance.camera.view.height-30;
+                   i++;
+               }, this);
+           }
+       },
        transitionTo: function(){
            this.groundLayer.transitionTo.start();
            this.doodadsLayer.transitionTo.start();
@@ -168,17 +202,17 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
            var hpDifference = this.player.maxHp - this.player.hp;
            switch(itemSprite.itemType){
                case 1:
-                   console.log('got red pill');
+                   console.log('got blue pill');
                    break;
                case 2:
-                   console.log('got bluePill');
+                   console.log('got ramen');
                    break;
                case 3:
-                   console.log('got ramen');
+                   console.log('got netfix');
                    this.player.hp += Math.min(hpDifference, 10);
                    break;
                case 4:
-                   console.log('got netfix');
+                   console.log('got dolla');
                    this.player.hp += Math.min(hpDifference, 20);
                    break;
            }
@@ -199,72 +233,29 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
            itemData.itemType = Math.round(Math.random() * 4);
            switch(itemData.itemType){
                case 1:
-                   itemData.sprite = 'redPill';
-                   break;
-               case 2:
                    itemData.sprite = 'bluePill';
                    break;
-               case 3:
+               case 2:
                    itemData.sprite = 'ramen';
                    break;
-               case 4:
+               case 3:
                    itemData.sprite = 'netfix';
                    break;
-               case 5:
+               case 4:
                    itemData.sprite = 'dolla';
                    break;
-               case 6:
+               case 5:
                    itemData.sprite = 'controller';
                    break;
-               case 7:
+               case 6:
                    itemData.sprite = 'coffee';
                    break;
-               case 8:
+               case 7:
                    itemData.sprite = 'energyDrink';
                    break;
-               case 9:
-                   if(!this.brassRingExists){
-                       itemData.sprite = 'brassRing';
-                       this.brassRingExists = true;
-                   }
-                   else {
-                       itemData.sprite = 'coffee';
-                       itemData.itemType = 7;
-                   }
-                   break;
-               case 10:
-                   if(!this.whiteKeyExists){
-                       itemData.sprite = 'whiteKey';
-                       this.whiteKeyExists = true;
-                   }
-                   else{
-                       itemData.sprite = 'dolla';
-                       itemData.itemType = 5;
-                   }
-                   break;
-               case 11:
-                   if(!this.blackKeyExists){
-                       itemData.sprite = 'blackKey';
-                       this.blackKeyExists = true;
-                   }
-                   else{
-                       itemData.sprite = 'controller';
-                       itemData.itemType = 6;
-                   }
-                   break;
-               case 12:
-                   if(!this.tomeExists){
-                       itemData.sprite = 'tome';
-                       this.tomeExists = true;
-                   }
-                   else{
-                       itemData.sprite = 'ramen';
-                       itemData.itemType = 3;
-                   }
-                   break;
            }
-           itemData.x = Math.round(Math.random() * 500);
-           itemData.y = Math.round(Math.random() * 500);
+           itemData.x = this.phaserInstance.world.randomX;
+           itemData.y = this.phaserInstance.world.randomY;
            return itemData;
        }
    };

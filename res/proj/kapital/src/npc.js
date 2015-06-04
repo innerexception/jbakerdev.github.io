@@ -1,26 +1,27 @@
 define([], function(){
-    var npc = function(sprite){
+    var npc = function(sprite, phaserInstance){
         this.sprite = sprite;
         this.sprite.tint = 0xff0000;
-        this.sprite.direction = 'south';
+        this.phaserInstance = phaserInstance;
+        this.resetTargetPoint();
     };
 
     npc.prototype = {
         update: function(){
-            switch(this.sprite.direction){
-                case 'south':
-                    this.sprite.body.velocity.y = 2;
-                    break;
-                case 'north':
-                    this.sprite.body.velocity.y = -2;
-                    break;
-                case 'east':
-                    this.sprite.body.velocity.x = 2;
-                    break;
-                case 'west':
-                    this.sprite.body.velocity.x = -2;
-                    break;
+            this.travelInterval--;
+            if(this.travelInterval <= 0){
+                this.resetTargetPoint();
             }
+        },
+        stop: function(){
+            this.sprite.body.velocity.setTo(0);
+        },
+        resetTargetPoint: function() {
+            var targetPoint = {x: this.phaserInstance.world.randomX/2, y: this.phaserInstance.world.randomY/2};
+
+            this.phaserInstance.physics.arcade.accelerateToXY(this.sprite, targetPoint.x, targetPoint.y, 20, 20, 20);
+
+            this.travelInterval = 500;
         }
     };
 

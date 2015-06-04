@@ -1,4 +1,4 @@
-define(['lodash', 'npc'], function(_, Npc){
+define(['lodash', 'npc', 'candy'], function(_, Npc, Candy){
     var room = function(phaserInstance, player, enteredFrom){
         this.phaserInstance = phaserInstance;
         this.enteredFrom = enteredFrom;
@@ -29,11 +29,6 @@ define(['lodash', 'npc'], function(_, Npc){
         this.groundTileSet.setCollisionBetween(28,28, true, 'doors', true);
 
         this.player = player;
-        this.player.originalX = this.player.sprite.x;
-        this.player.originalY = this.player.sprite.y+15;
-        this.player.sprite.x = 100;
-        this.player.sprite.y = 100;
-        this.player.sprite.bringToTop();
 
         this.spawnItem();
         this.spawnNpcs();
@@ -45,6 +40,11 @@ define(['lodash', 'npc'], function(_, Npc){
             this.doodadsLayer.transitionTo.start();
             this.doorwaysLayer.transitionTo.start();
             this.npcs.transitionTo.start();
+            this.player.originalX = this.player.sprite.x;
+            this.player.originalY = this.player.sprite.y+15;
+            this.player.sprite.x = 100;
+            this.player.sprite.y = 100;
+            this.player.sprite.bringToTop();
         },
         transitionFrom: function(nextTransitionDelegate, context){
             this.player.inRoom = false;
@@ -54,7 +54,10 @@ define(['lodash', 'npc'], function(_, Npc){
             this.npcs.transitionFrom.start();
             this.player.sprite.x = this.player.originalX;
             this.player.sprite.y = this.player.originalY;
-
+            this.player.inRoom = false;
+            _.each(this.npcObjects, function(npcObject){
+                npcObject.stop();
+            });
             nextTransitionDelegate.apply(context);
         },
         update: function(){
@@ -63,8 +66,9 @@ define(['lodash', 'npc'], function(_, Npc){
                 _.each(this.npcObjects, function(npcObject){
                     npcObject.update();
                 });
-                this.phaserInstance.physics.arcade.collide(this.player.sprite, this.npcs, this.playerHitConsumer, null, this);
+                this.phaserInstance.physics.arcade.overlap(this.player.sprite, this.npcs, this.playerHitConsumer, null, this);
                 this.phaserInstance.physics.arcade.overlap(this.player.sprite, this.doorwaysLayer, this.playerHitDoor, null, this);
+                this.phaserInstance.physics.arcade.collide(this.player.sprite, this.chestSprite, this.playerHitChest, null, this);
                 this.phaserInstance.physics.arcade.collide(this.player.sprite, this.doodadsLayer);
                 this.phaserInstance.physics.arcade.collide(this.player.sprite, this.groundLayer);
                 this.phaserInstance.physics.arcade.overlap(this.npcs, this.doodadsLayer, this.hitWall, null, this);
@@ -89,13 +93,82 @@ define(['lodash', 'npc'], function(_, Npc){
             }
         },
         playerHitConsumer: function(playerSprite, consumerSprite){
-            console.log('npc player hit');
+            //Play sound also
+            Candy.shakeCamera(50, 2, 20, this.player, this.phaserInstance);
+            this.transitionFrom(this.enteredFrom.transitionTo, this.enteredFrom);
         },
         playerHitDoor: function(playerSprite, doorSprite){
             this.transitionFrom(this.enteredFrom.transitionTo, this.enteredFrom);
         },
+        playerHitChest: function(playerSprite, chestSprite){
+            if(chestSprite.frame != 1){
+                chestSprite.frame = 1;
+                this.player.itemSprites.push(chestSprite.itemData.sprite);
+                this.player.itemSpritesDirty = true;
+            }
+        },
         spawnItem: function(){
-
+            this.chestSprite = this.phaserInstance.add.sprite(100, 200, 'chest', 0);
+            this.phaserInstance.physics.arcade.enableBody(this.chestSprite);
+            this.chestSprite.body.immovable = true;
+            this.chestSprite.itemData = this.getRandomItemData();
+        },
+        getRandomItemData: function(){
+            var itemData = {};
+            itemData.itemType = Math.round(Math.random() * 4);
+            switch(itemData.itemType){
+                case 1:
+                    if(!this.redPillExists){
+                        itemData.sprite = 'redPill';
+                        this.redPillExists = true;
+                    }
+                    else {
+                        itemData.sprite = 'coffee';
+                        itemData.itemType = 7;
+                    }
+                    break;
+                case 2:
+                    if(!this.brassRingExists){
+                        itemData.sprite = 'brassRing';
+                        this.brassRingExists = true;
+                    }
+                    else {
+                        itemData.sprite = 'coffee';
+                        itemData.itemType = 7;
+                    }
+                    break;
+                case 3:
+                    if(!this.whiteKeyExists){
+                        itemData.sprite = 'whiteKey';
+                        this.whiteKeyExists = true;
+                    }
+                    else{
+                        itemData.sprite = 'dolla';
+                        itemData.itemType = 5;
+                    }
+                    break;
+                case 4:
+                    if(!this.blackKeyExists){
+                        itemData.sprite = 'blackKey';
+                        this.blackKeyExists = true;
+                    }
+                    else{
+                        itemData.sprite = 'controller';
+                        itemData.itemType = 6;
+                    }
+                    break;
+                case 5:
+                    if(!this.tomeExists){
+                        itemData.sprite = 'tome';
+                        this.tomeExists = true;
+                    }
+                    else{
+                        itemData.sprite = 'ramen';
+                        itemData.itemType = 3;
+                    }
+                    break;
+            }
+            return itemData;
         },
         spawnNpcs: function(){
             this.npcs = this.phaserInstance.add.group();
@@ -106,9 +179,9 @@ define(['lodash', 'npc'], function(_, Npc){
             this.npcs.transitionFrom = this.phaserInstance.add.tween(this.npcs)
                 .to({alpha:0}, 2000, Phaser.Easing.Linear.None);
 
-            _.times(3, function(){
+            _.times(6, function(){
                 var npcSprite = this.npcs.create(Math.round(Math.random() * 100), Math.round(Math.random() * 100), 'player');
-                this.npcObjects.push(new Npc(npcSprite));
+                this.npcObjects.push(new Npc(npcSprite, this.phaserInstance));
             }, this);
         }
     };
