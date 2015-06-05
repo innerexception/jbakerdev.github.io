@@ -104,7 +104,10 @@ define(['lodash', 'npc', 'candy'], function(_, Npc, Candy){
             if(chestSprite.frame != 1){
                 chestSprite.frame = 1;
                 this.player.itemSprites.push(chestSprite.itemData.sprite);
+                console.log('got '+chestSprite.itemData.sprite);
                 this.player.itemSpritesDirty = true;
+                if(chestSprite.itemData.sprite==='brassRing') this.player.hasBrassRing = true;
+                if(chestSprite.itemData.sprite==='tome') this.player.hasTome = true;
             }
         },
         spawnItem: function(){

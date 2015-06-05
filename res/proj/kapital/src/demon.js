@@ -4,6 +4,7 @@ define(['lodash', 'candy'], function(_, Candy){
         this.player = player;
         this.playerSprite = player.sprite;
         this.phaserInstance = phaserInstance;
+        this.hp = 10;
         this.resetTargetPoint();
     };
 
@@ -14,6 +15,7 @@ define(['lodash', 'candy'], function(_, Candy){
                     sprite.tint = 0xff0000;
                 }, this);
                 this.phaserInstance.physics.arcade.accelerateToObject(this.spriteGroup.children[0], this.playerSprite, 60, 60, 60);
+                this.player.hp-=0.5;
                 Candy.shakeCamera(50, 2, 2, this.player, this.phaserInstance);
             }
             else if(this.phaserInstance.physics.arcade.distanceBetween(this.spriteGroup.children[0], this.playerSprite) < 200 && !this.player.inRoom){

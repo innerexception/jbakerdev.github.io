@@ -54,7 +54,7 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
        this.rainEmitter.particleBringToTop = true;
        this.rainEmitter.start(false, 1500, 1);
 
-       this.spawnDemon();
+       this.spawnDemon(300, 300);
 
        this.overlayCtx = phaserInstance.add.graphics(0,0);
 
@@ -68,10 +68,22 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
 
            if(!this.player.inRoom){
                this.demon.update();
+               if(this.demon.hp <= 0){
+                   this.runVictory();
+               }
+               if(this.items.children.length === 0 && this.player.hasBrassRing){
+                   this.runTransformation();
+                   this.player.hasBrassRing = false;
+               }
+               if(this.player.hasTome){
+                   this.activateProjectiles();
+                   this.player.hasTome = false;
+               }
                this.phaserInstance.physics.arcade.overlap(this.player.sprite, this.doorwaysLayer, this.playerEnteredDoor, null, this);
                this.phaserInstance.physics.arcade.overlap(this.player.sprite, this.items, this.playerHitItem, null, this);
                this.phaserInstance.physics.arcade.collide(this.player.sprite, this.doodadsLayer);
                this.phaserInstance.physics.arcade.collide(this.player.sprite, this.groundLayer);
+               this.phaserInstance.physics.arcade.overlap(this.player.bullets, this.demon, this.demonHit, null, this);
                this.player.update();
                if(this.player.hp <= 0){
                    this.runLoss();
@@ -94,8 +106,28 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
                }
            }
        },
-       spawnDemon: function(){
-           var demonStartPoint = {x: 200, y:200};
+       runLoss: function(){
+           this.transitionFrom();
+           this.isRunning = false;
+       },
+       runVictory: function(){
+           this.transitionFrom();
+           this.isRunning = false;
+       },
+       runTransformation: function(){
+           this.spawnDemon(this.player.sprite.x, this.player.sprite.y);
+           this.player.sprite.kill();
+       },
+       activateProjectiles: function(){
+           this.player.bullets = this.phaserInstance.add.group();
+       },
+       demonHit: function(bulletSprite, demonSprite){
+           bulletSprite.kill();
+           this.demon.hp-=1;
+           Candy.shakeCamera(50, 2, 10, this.player, this.phaserInstance);
+       },
+       spawnDemon: function(x,y){
+           var demonStartPoint = {x: x, y:y};
            var demonOffset = 2;
            var demonSpriteGroup = this.phaserInstance.add.group();
            demonSpriteGroup.enableBody = true;
@@ -187,7 +219,7 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
            this.doodadsLayer.transitionFrom.start();
            this.doorwaysLayer.transitionFrom.start();
            this.items.transitionFrom.start();
-           nextTransitionDelegate.apply(context);
+           if(nextTransitionDelegate) nextTransitionDelegate.apply(context);
        },
        playerEnteredDoor:function(playerSprite, doorSprite){
            console.log('door collide');
@@ -203,9 +235,11 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
            switch(itemSprite.itemType){
                case 1:
                    console.log('got blue pill');
+                   this.player.hp += Math.min(hpDifference, 10);
                    break;
                case 2:
                    console.log('got ramen');
+                   this.player.hp += Math.min(hpDifference, 10);
                    break;
                case 3:
                    console.log('got netfix');
@@ -215,17 +249,26 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
                    console.log('got dolla');
                    this.player.hp += Math.min(hpDifference, 20);
                    break;
+               case 5:
+                   this.player.hp += Math.min(hpDifference, 20);
+                   break;
+               case 6:
+                   this.player.hp += Math.min(hpDifference, 20);
+                   break;
+               case 7:
+                   this.player.hp += Math.min(hpDifference, 20);
+                   break;
            }
            itemSprite.kill();
        },
        spawnInitialItems: function(){
-           for(var i=0; i<10; i++){
+           _.times(10, function(){
                var newItemData = this.getRandomItemData();
                var item = this.items.create(newItemData.x, newItemData.y, newItemData.sprite);
                item.itemType = newItemData.itemType;
                item.scale.x = 0.4;
                item.scale.y = 0.4;
-           }
+           }, this);
            this.items.transitionTo.start();
        },
        getRandomItemData: function(){
