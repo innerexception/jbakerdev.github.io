@@ -28,7 +28,7 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
        this.groundTileSet.setCollisionBetween(81,99, true, 'ground_doodads', true);
        this.groundTileSet.setCollisionBetween(15,16, true, 'ground', true);
        this.groundTileSet.setCollisionBetween(81,99, true, 'doors', true);
-       this.player = new Player(phaserInstance, 200, 200);
+       this.player = new Player(phaserInstance, 0, 200);
        this.items = phaserInstance.add.group();
        this.items.alpha = 0;
        this.items.transitionTo = phaserInstance.add.tween(this.items)
@@ -66,33 +66,35 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
    worldMap.prototype = {
        update: function(){
 
-           if(!this.player.inRoom){
-               this.demon.update();
-               if(this.demon.hp <= 0){
-                   this.runVictory();
+           if(this.isRunning){
+               if(!this.player.inRoom){
+                   this.demon.update();
+                   if(this.demon.hp <= 0){
+                       this.runVictory();
+                   }
+                   if(this.items.children.length === 0 && this.player.hasBrassRing){
+                       this.runTransformation();
+                       this.player.hasBrassRing = false;
+                   }
+                   if(this.player.hasTome){
+                       this.activateProjectiles();
+                       this.player.hasTome = false;
+                   }
+                   this.phaserInstance.physics.arcade.overlap(this.player.sprite, this.doorwaysLayer, this.playerEnteredDoor, null, this);
+                   this.phaserInstance.physics.arcade.overlap(this.player.sprite, this.items, this.playerHitItem, null, this);
+                   this.phaserInstance.physics.arcade.collide(this.player.sprite, this.doodadsLayer);
+                   this.phaserInstance.physics.arcade.collide(this.player.sprite, this.groundLayer);
+                   this.phaserInstance.physics.arcade.overlap(this.player.bullets, this.demon, this.demonHit, null, this);
+                   this.player.update();
+                   if(this.player.hp <= 0){
+                       this.runLoss();
+                   }
                }
-               if(this.items.children.length === 0 && this.player.hasBrassRing){
-                   this.runTransformation();
-                   this.player.hasBrassRing = false;
+               else{
+                   _.each(this.rooms, function(room){
+                       room.update();
+                   });
                }
-               if(this.player.hasTome){
-                   this.activateProjectiles();
-                   this.player.hasTome = false;
-               }
-               this.phaserInstance.physics.arcade.overlap(this.player.sprite, this.doorwaysLayer, this.playerEnteredDoor, null, this);
-               this.phaserInstance.physics.arcade.overlap(this.player.sprite, this.items, this.playerHitItem, null, this);
-               this.phaserInstance.physics.arcade.collide(this.player.sprite, this.doodadsLayer);
-               this.phaserInstance.physics.arcade.collide(this.player.sprite, this.groundLayer);
-               this.phaserInstance.physics.arcade.overlap(this.player.bullets, this.demon, this.demonHit, null, this);
-               this.player.update();
-               if(this.player.hp <= 0){
-                   this.runLoss();
-               }
-           }
-           else{
-               _.each(this.rooms, function(room){
-                   room.update();
-               });
            }
 
            this.drawOverlay();

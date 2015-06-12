@@ -1,4 +1,7 @@
 define(['candy', 'worldMap'], function(Candy, WorldMap){
+    //TODO Add drawTooltips for flavor text
+    //TODO Add 6 more room maps
+    //TODO Add sounds
     //Shitty Globals for Google WebFonts
     //  The Google WebFont Loader will look for this object, so create it before loading the script.
     WebFontConfig = {
@@ -50,7 +53,9 @@ define(['candy', 'worldMap'], function(Candy, WorldMap){
             this.load.image('rain', 'res/sprite/rain.png');
 
             this.load.tilemap('ground_tiles', 'res/map/testLevel.json', null, Phaser.Tilemap.TILED_JSON);
-            this.load.tilemap('room_tiles', 'res/map/testInterior.json', null, Phaser.Tilemap.TILED_JSON);
+            this.load.tilemap('room_tiles_0', 'res/map/testInterior.json', null, Phaser.Tilemap.TILED_JSON);
+            this.load.tilemap('room_tiles_1', 'res/map/testInterior2.json', null, Phaser.Tilemap.TILED_JSON);
+
 
             this.load.spritesheet('player', 'res/sprite/player_sprites.png', 16, 16);
             this.load.spritesheet('chest', 'res/sprite/chest_sprites.png', 16, 16);
@@ -61,12 +66,9 @@ define(['candy', 'worldMap'], function(Candy, WorldMap){
         phaserLoad: function () {
             //1st time load
 
-            this.world.setBounds(0, 0, 600,600);
+            this.world.setBounds(0, 0, 1600,800);
             this.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
             this.scale.setUserScale(2, 2);
-             //Camera init
-            //this.camera.deadzone = new Phaser.Rectangle(150, 150, 500, 300);
-            //this.camera.view = new Phaser.Rectangle(0, 0, 500, 300);
             this.physics.startSystem(Phaser.Physics.ARCADE);
             this.loadComplete.dispatch();
         },

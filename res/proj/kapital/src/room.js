@@ -4,7 +4,7 @@ define(['lodash', 'npc', 'candy'], function(_, Npc, Candy){
         this.enteredFrom = enteredFrom;
         this.npcObjects = [];
 
-        this.groundTileSet = phaserInstance.add.tilemap('room_tiles', 16, 16);
+        this.groundTileSet = phaserInstance.add.tilemap('room_tiles_'+Math.round(Math.random()), 16, 16);
         this.groundTileSet.addTilesetImage('indoor_basic_tiles', 'indoor_basic_tiles');
         this.groundTileSet.addTilesetImage('indoor_doodads', 'indoor_doodads');
         this.groundLayer = this.groundTileSet.createLayer('floor');
