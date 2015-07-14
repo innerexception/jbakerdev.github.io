@@ -55,6 +55,8 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
        this.rainEmitter.start(false, 1500, 1);
 
        this.spawnDemon(300, 300);
+       this.narrativeItems = [];
+       this.getNarrativeItems(10);
 
        this.overlayCtx = phaserInstance.add.graphics(0,0);
 
@@ -84,6 +86,9 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
                    this.phaserInstance.physics.arcade.overlap(this.player.sprite, this.items, this.playerHitItem, null, this);
                    this.phaserInstance.physics.arcade.collide(this.player.sprite, this.doodadsLayer);
                    this.phaserInstance.physics.arcade.collide(this.player.sprite, this.groundLayer);
+                   _.each(this.narrativeItems, function(item){
+                       this.phaserInstance.physics.arcade.collide(this.player.sprite, item, this.playerNarrationHit, null, this);
+                   }, this);
                    this.phaserInstance.physics.arcade.overlap(this.player.bullets, this.demon, this.demonHit, null, this);
                    this.player.update();
                    if(this.player.hp <= 0){
@@ -107,6 +112,9 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
                    this.drawHealth();
                }
            }
+       },
+       playerNarrationHit: function(playerSprite, totemSprite){
+           Candy.drawTooltip(this.phaserInstance, totemSprite.x, totemSprite.y, totemSprite.narrativeText, 8);
        },
        runLoss: function(){
            this.transitionFrom();
@@ -166,9 +174,9 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
        drawOverlay: function(){
            this.overlayCtx.clear();
            this.overlayCtx.beginFill(Candy.gameBoyPalette.extraDarkBlueGreenHex, 0.5);
-           for(var i=0; i<(1-this.player.hp/this.player.maxHp)*10000; i++){
-               this.overlayCtx.drawRect(Math.random()*this.phaserInstance.world.width, Math.random()*this.phaserInstance.world.height,2,2);
-           }
+           //for(var i=0; i<(1-this.player.hp/this.player.maxHp)*10000; i++){
+           //    this.overlayCtx.drawRect(Math.random()*this.phaserInstance.world.width, Math.random()*this.phaserInstance.world.height,2,2);
+           //}
            this.overlayCtx.endFill();
            this.overlayCtx.beginFill(Candy.gameBoyPalette.extraDarkBlueGreenHex, Math.max(1-this.player.hp/this.player.maxHp, 0.2));
            this.overlayCtx.drawRect(0,0,this.phaserInstance.world.width*2, this.phaserInstance.world.height*2);
@@ -226,7 +234,8 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
        playerEnteredDoor:function(playerSprite, doorSprite){
            console.log('door collide');
            if(!doorSprite.roomObj) {
-               doorSprite.roomObj = new Room(this.phaserInstance, this.player, this);
+               var roomKey = Math.round(Math.random()+5);
+               doorSprite.roomObj = new Room(this.phaserInstance, this.player, this, this.getNarrativeItems(3, roomKey), roomKey);
                this.rooms.push(doorSprite.roomObj);
            }
            this.transitionFrom(doorSprite.roomObj.transitionTo, doorSprite.roomObj);
@@ -264,7 +273,7 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
            itemSprite.kill();
        },
        spawnInitialItems: function(){
-           _.times(10, function(){
+           _.times(20, function(){
                var newItemData = this.getRandomItemData();
                var item = this.items.create(newItemData.x, newItemData.y, newItemData.sprite);
                item.itemType = newItemData.itemType;
@@ -302,7 +311,42 @@ define(['player', 'room', 'lodash', 'candy', 'demon'], function(Player, Room, _,
            itemData.x = this.phaserInstance.world.randomX;
            itemData.y = this.phaserInstance.world.randomY;
            return itemData;
-       }
+       },
+       getNarrativeItems: function(num, roomKey){
+           var items = this.NarrativeItems.slice(this.player.narrativeStart, this.player.narrativeStart+num);
+           this.player.narrativeStart = this.player.narrativeStart+num;
+           _.each(items, function(item){
+               if(roomKey) {
+                   item.x = Math.round(Math.random()*this.roomDimensions[roomKey].width);
+                   item.y = Math.round(Math.random()*this.roomDimensions[roomKey].height);
+               }
+               else{
+                   item.x = this.phaserInstance.world.randomX;
+                   item.y = this.phaserInstance.world.randomY;
+               }
+               var sprite = this.phaserInstance.add.sprite(item.x, item.y, 'totem');
+               this.phaserInstance.physics.arcade.enableBody(sprite);
+               sprite.scale.setTo(0.3);
+               sprite.body.immovable = true;
+               sprite.narrativeText = item.narrativeText;
+               this.narrativeItems.push(sprite);
+           }, this);
+           return items;
+       },
+
+       roomDimensions : {
+           0: { width: 15*15, height: 15*15 },
+           1: { width: 30*15, height: 15*15 }
+       },
+
+       NarrativeItems : [
+        { narrativeText: '' },
+        { narrativeText: '' },
+        { narrativeText: '' },
+        { narrativeText: '' },
+        { narrativeText: '' },
+        { narrativeText: '' }
+       ]
    };
 
    return worldMap;

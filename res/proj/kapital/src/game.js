@@ -1,5 +1,6 @@
 define(['candy', 'worldMap'], function(Candy, WorldMap){
     //TODO Add drawTooltips for flavor text
+    //TODO fix sprite sheets
     //TODO Add 6 more room maps
     //TODO Add sounds
     //Shitty Globals for Google WebFonts
@@ -51,10 +52,15 @@ define(['candy', 'worldMap'], function(Candy, WorldMap){
             this.load.image('indoor_basic_tiles', 'res/sprite/indoor_basic_tiles.png');
             this.load.image('indoor_doodads', 'res/sprite/indoor_doodads.png');
             this.load.image('rain', 'res/sprite/rain.png');
+            this.load.image('totem', 'res/sprite/totem.png');
 
             this.load.tilemap('ground_tiles', 'res/map/testLevel.json', null, Phaser.Tilemap.TILED_JSON);
             this.load.tilemap('room_tiles_0', 'res/map/testInterior.json', null, Phaser.Tilemap.TILED_JSON);
             this.load.tilemap('room_tiles_1', 'res/map/testInterior2.json', null, Phaser.Tilemap.TILED_JSON);
+            this.load.tilemap('room_tiles_2', 'res/map/testInterior3.json', null, Phaser.Tilemap.TILED_JSON);
+            this.load.tilemap('room_tiles_3', 'res/map/testInterior4.json', null, Phaser.Tilemap.TILED_JSON);
+            this.load.tilemap('room_tiles_4', 'res/map/testInterior5.json', null, Phaser.Tilemap.TILED_JSON);
+            this.load.tilemap('room_tiles_5', 'res/map/testInterior6.json', null, Phaser.Tilemap.TILED_JSON);
 
 
             this.load.spritesheet('player', 'res/sprite/player_sprites.png', 16, 16);

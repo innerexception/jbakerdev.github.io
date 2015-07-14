@@ -1,10 +1,11 @@
 define(['lodash', 'npc', 'candy'], function(_, Npc, Candy){
-    var room = function(phaserInstance, player, enteredFrom){
+    var room = function(phaserInstance, player, enteredFrom, narrationItems, roomKey){
         this.phaserInstance = phaserInstance;
         this.enteredFrom = enteredFrom;
         this.npcObjects = [];
+        this.totems = [];
 
-        this.groundTileSet = phaserInstance.add.tilemap('room_tiles_'+Math.round(Math.random()), 16, 16);
+        this.groundTileSet = phaserInstance.add.tilemap('room_tiles_'+roomKey, 16, 16);
         this.groundTileSet.addTilesetImage('indoor_basic_tiles', 'indoor_basic_tiles');
         this.groundTileSet.addTilesetImage('indoor_doodads', 'indoor_doodads');
         this.groundLayer = this.groundTileSet.createLayer('floor');
@@ -31,6 +32,7 @@ define(['lodash', 'npc', 'candy'], function(_, Npc, Candy){
         this.player = player;
 
         this.spawnItem();
+        this.spawnRoomNarration(narrationItems);
         this.spawnNpcs();
     };
 
@@ -69,6 +71,9 @@ define(['lodash', 'npc', 'candy'], function(_, Npc, Candy){
                 this.phaserInstance.physics.arcade.overlap(this.player.sprite, this.npcs, this.playerHitConsumer, null, this);
                 this.phaserInstance.physics.arcade.overlap(this.player.sprite, this.doorwaysLayer, this.playerHitDoor, null, this);
                 this.phaserInstance.physics.arcade.collide(this.player.sprite, this.chestSprite, this.playerHitChest, null, this);
+                _.each(this.totems, function(totem){
+                    this.phaserInstance.physics.arcade.collide(this.player.sprite, totem, this.playerNarrationHit, null, this);
+                }, this);
                 this.phaserInstance.physics.arcade.collide(this.player.sprite, this.doodadsLayer);
                 this.phaserInstance.physics.arcade.collide(this.player.sprite, this.groundLayer);
                 this.phaserInstance.physics.arcade.overlap(this.npcs, this.doodadsLayer, this.hitWall, null, this);
@@ -110,11 +115,23 @@ define(['lodash', 'npc', 'candy'], function(_, Npc, Candy){
                 if(chestSprite.itemData.sprite==='tome') this.player.hasTome = true;
             }
         },
+        playerNarrationHit: function(playerSprite, totemSprite){
+            Candy.drawTooltip(this.phaserInstance, totemSprite.x, totemSprite.y, totemSprite.narrativeText, 8);
+        },
         spawnItem: function(){
             this.chestSprite = this.phaserInstance.add.sprite(100, 200, 'chest', 0);
             this.phaserInstance.physics.arcade.enableBody(this.chestSprite);
             this.chestSprite.body.immovable = true;
             this.chestSprite.itemData = this.getRandomItemData();
+        },
+        spawnRoomNarration: function(items){
+            _.each(items, function(item){
+                var sprite = this.phaserInstance.add.sprite(item.x, item.y, 'totem');
+                this.phaserInstance.physics.arcade.enableBody(sprite);
+                sprite.body.immovable = true;
+                sprite.narrativeText = item.narrativeText;
+                this.totems.push(sprite);
+            }, this);
         },
         getRandomItemData: function(){
             var itemData = {};
