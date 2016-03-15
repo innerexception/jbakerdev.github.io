@@ -1,0 +1,49 @@
+
+svg {
+    -webkit-transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000;
+
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+input[type=range]{
+    width: 20px;
+    height: 10px;
+}
+
+.no-events{
+    pointer-events: none;
+}
+
+.turnbase-map-outer{
+    height: 100%;
+}
+
+.turnbase-region{
+    stroke-opacity: 1;
+    stroke-width:0.5;
+    fill-opacity: 1;
+}
+
+.turnbase-sea{
+    fill: #284670;
+    fill-opacity: 1;
+}
+
+.turnbase-unit{
+    stroke: black;
+    fill-opacity: 1;
+    stroke-opacity: 1;
+    stroke-width:1;
+}
+
+.turnbase-region.selected{
+    fill: green;
+}
+
+.turnbase-region.unit-path-region{
+    fill: green;
+}
