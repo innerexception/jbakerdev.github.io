@@ -21805,11 +21805,11 @@
 	
 	var _UIStateContainer2 = _interopRequireDefault(_UIStateContainer);
 	
-	var _LayerManager = __webpack_require__(192);
+	var _LayerManager = __webpack_require__(195);
 	
 	var _LayerManager2 = _interopRequireDefault(_LayerManager);
 	
-	__webpack_require__(196);
+	__webpack_require__(199);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -21859,22 +21859,17 @@
 	
 	var _reactRedux = __webpack_require__(161);
 	
-	var _UIManager = __webpack_require__(191);
+	var _LayerManagerActions = __webpack_require__(191);
+	
+	var _UIManager = __webpack_require__(194);
 	
 	var _UIManager2 = _interopRequireDefault(_UIManager);
 	
-	var _LayerManager = __webpack_require__(192);
+	var _LayerManager = __webpack_require__(195);
 	
 	var _LayerManager2 = _interopRequireDefault(_LayerManager);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	//import { markerClick, shapeCreated, shapeRightClicked,
-	//        zoomLevelChanged, radiusChanged, shapeBoundsChanged, hideShapeConfig,
-	//        shapeDelete, setLensCategory, hideShapeButton, showShapeButton,
-	//        toggleLensSticky, globalCategoryChange, setLensOrdinalValue, exportCsv,
-	//        toggleParentCategory, sliceCategoryChanged} from './Actions.js';
-	
 	
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
@@ -21883,88 +21878,685 @@
 	        categories: state.categories ? state.categories : [],
 	        dataCategories: state.dataCategories,
 	        shapes: state.shapes,
-	        layerManager: state.layerManager ? state.layerManager : new _LayerManager2.default(2000, 500)
+	        layerManager: state.layerManager ? state.layerManager : new _LayerManager2.default(document.documentElement.clientWidth - 16, document.documentElement.clientHeight - 100) //TODO: calc the height of the UI header
 	    };
 	};
+	//import { markerClick, shapeCreated, shapeRightClicked,
+	//        zoomLevelChanged, radiusChanged, shapeBoundsChanged, hideShapeConfig,
+	//        shapeDelete, setLensCategory, hideShapeButton, showShapeButton,
+	//        toggleLensSticky, globalCategoryChange, setLensOrdinalValue, exportCsv,
+	//        toggleParentCategory, sliceCategoryChanged} from './Actions.js';
+	
 	
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	    return {
 	        onMarkerClick: function onMarkerClick(e, marker) {
-	            dispatch(markerClick(e, marker));
+	            dispatch((0, _LayerManagerActions.markerClick)(e, marker));
 	        },
-	        onShapeCreated: function onShapeCreated(shape, map) {
-	            dispatch(shapeCreated(shape, map));
+	        onLensCreated: function onLensCreated(shape, map) {
+	            dispatch((0, _LayerManagerActions.lensCreated)(shape, map));
 	        },
-	        onShapeRightClick: function onShapeRightClick(e, shape) {
-	            dispatch(shapeRightClicked(e, shape));
+	        onLensBoundsChanged: function onLensBoundsChanged(shape) {
+	            dispatch((0, _LayerManagerActions.lensBoundsChanged)(shape));
 	        },
-	        onShapeBoundsChanged: function onShapeBoundsChanged(shape) {
-	            dispatch(shapeBoundsChanged(shape));
-	        },
-	        onRadiusChanged: function onRadiusChanged(shape) {
-	            dispatch(radiusChanged(shape));
-	        },
-	        onZoomChanged: function onZoomChanged(e) {
-	            dispatch(zoomLevelChanged(e));
-	        },
-	        onShapeDelete: function onShapeDelete(shape) {
-	            dispatch(shapeDelete(shape));
-	        },
-	        onSetLensCategorySetting: function onSetLensCategorySetting(category, setting) {
-	            dispatch(setLensCategory(category, setting));
-	        },
-	        toggleLensSticky: function (_toggleLensSticky) {
-	            function toggleLensSticky(_x) {
-	                return _toggleLensSticky.apply(this, arguments);
-	            }
-	
-	            toggleLensSticky.toString = function () {
-	                return _toggleLensSticky.toString();
-	            };
-	
-	            return toggleLensSticky;
-	        }(function (state) {
-	            dispatch(toggleLensSticky(state));
-	        }),
-	        onGlobalCategoryChange: function onGlobalCategoryChange(category, categoryType) {
-	            dispatch(globalCategoryChange(category, categoryType));
-	        },
-	        showShapeConfigButton: function showShapeConfigButton(shape) {
-	            dispatch(showShapeButton(shape));
-	        },
-	        hideShapeConfigButton: function hideShapeConfigButton() {
-	            dispatch(hideShapeButton());
-	        },
-	        onShapeConfigClose: function onShapeConfigClose() {
-	            dispatch(hideShapeConfig());
-	        },
-	        onSetLensCategoryOrdinal: function onSetLensCategoryOrdinal(category, setting) {
-	            dispatch(setLensOrdinalValue(setting, category));
-	        },
-	        onExportClick: function onExportClick() {
-	            dispatch(exportCsv());
-	        },
-	        onSliceCategoryChange: function onSliceCategoryChange(categoryName, selectChildren) {
-	            dispatch(sliceCategoryChanged(categoryName, selectChildren));
-	        },
-	        onToggleParentCategory: function onToggleParentCategory(categoryName) {
-	            dispatch(toggleParentCategory(categoryName));
+	        onLensRadiusChanged: function onLensRadiusChanged(shape) {
+	            dispatch((0, _LayerManagerActions.lensRadiusChanged)(shape));
 	        }
 	    };
 	};
 	
+	//onZoomChanged: (e)=> {
+	//    dispatch(zoomLevelChanged(e));
+	//},
+	//onShapeDelete: (shape) => {
+	//    dispatch(shapeDelete(shape));
+	//},
+	//onSetLensCategorySetting: (category, setting) => {
+	//    dispatch(setLensCategory(category, setting));
+	//},
+	//toggleLensSticky: (state) => {
+	//    dispatch(toggleLensSticky(state));
+	//},
+	//onGlobalCategoryChange: (category, categoryType) => {
+	//    dispatch(globalCategoryChange(category, categoryType));
+	//},
+	//showShapeConfigButton: (shape) => {
+	//    dispatch(showShapeButton(shape));
+	//},
+	//hideShapeConfigButton: () => {
+	//    dispatch(hideShapeButton());
+	//},
+	//onShapeConfigClose: () => {
+	//    dispatch(hideShapeConfig())
+	//},
+	//onSetLensCategoryOrdinal: (category, setting) => {
+	//    dispatch(setLensOrdinalValue(setting, category))
+	//},
+	//onExportClick: ()=>{
+	//    dispatch(exportCsv());
+	//},
+	//onSliceCategoryChange: (categoryName, selectChildren)=>{
+	//    dispatch(sliceCategoryChanged(categoryName, selectChildren));
+	//},
+	//onToggleParentCategory: (categoryName)=>{
+	//    dispatch(toggleParentCategory(categoryName));
+	//}
 	var UIStateContainer = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_UIManager2.default);
 	
 	exports.default = UIStateContainer;
 
 /***/ },
 /* 191 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.markerClick = exports.lensRadiusChanged = exports.lensBoundsChanged = exports.lensDelete = exports.lensCreated = undefined;
+	
+	var _isomorphicFetch = __webpack_require__(192);
+	
+	var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	//import { getMarkersFromCsv, getColumnValueRanges, getRegionValues } from '../marker/MarkerHelper.js';
+	
+	var lensCreated = exports.lensCreated = function lensCreated(shape, map) {
+	    return {
+	        type: 'LENS_CREATED',
+	        shape: shape,
+	        map: map
+	    };
+	};
+	
+	var lensDelete = exports.lensDelete = function lensDelete(shape) {
+	    return {
+	        type: 'LENS_DELETE',
+	        shape: shape
+	    };
+	};
+	
+	var lensBoundsChanged = exports.lensBoundsChanged = function lensBoundsChanged(shape) {
+	    return {
+	        type: 'LENS_BOUNDS_CHANGED',
+	        shape: shape
+	    };
+	};
+	
+	var lensRadiusChanged = exports.lensRadiusChanged = function lensRadiusChanged(shape) {
+	    return {
+	        type: 'LENS_RADIUS_CHANGED',
+	        shape: shape
+	    };
+	};
+	
+	var markerClick = exports.markerClick = function markerClick(e, marker) {
+	    return {
+	        type: 'MARKER_CLICK',
+	        e: e,
+	        marker: marker
+	    };
+	};
+	
+	//
+	//export const fetchData = (filename) => {
+	//    return (dispatch) => {
+	//        fetch('./data/' + filename).then((response) => {
+	//            response.text().then((text) => {
+	//                let columnsRowsObj = getMarkersFromCsv(text);
+	//                columnsRowsObj = getColumnValueRanges(columnsRowsObj);
+	//                columnsRowsObj = getRegionValues(columnsRowsObj);
+	//                dispatch(fetchedDataNoGeocode(columnsRowsObj));
+	//            })
+	//        });
+	//    }
+	//};
+	//
+	//export const fetchedDataNoGeocode = (columnsRowsObj) => {
+	//    return {
+	//        type: 'FETCHED_DATA_NO_GEOCODE',
+	//        categories: columnsRowsObj.columns,
+	//        rows: columnsRowsObj.rows,
+	//        dataCategories: columnsRowsObj.dataCategories
+	//    }
+	//};
+	//
+	//export const dataFetched = (columnsRowsObj) => {
+	//    return {
+	//        type: 'DATA_FETCHED',
+	//        markers: columnsRowsObj.rows,
+	//        categories: columnsRowsObj.columns
+	//    }
+	//};
+	//
+	//export const sliceCategoryChanged = (categoryName, selectChildren) => {
+	//    return {
+	//        type: 'SLICE_CATEGORY_CHANGED',
+	//        categoryName,
+	//        selectChildren
+	//    }
+	//};
+	//
+	//export const toggleParentCategory = (categoryName) => {
+	//    return {
+	//        type: 'TOGGLE_PARENT_CATEGORY',
+	//        categoryName
+	//    }
+	//}
+	//
+	//export const fetchViewState = (viewState) => {
+	//    return {
+	//        type: 'FETCH_VIEW_STATE',
+	//        viewState
+	//    }
+	//};
+	//
+	//
+	//export const markerPopupIn = (marker) => {
+	//    return {
+	//        type: 'MARKER_IN',
+	//        marker
+	//    }
+	//};
+	//
+	//export const lensConfigPopIn = () => {
+	//    return {
+	//        type: 'LENS_IN'
+	//    }
+	//};
+	//
+	//export const setLensCategory = (category, setting) => {
+	//    return {
+	//        type: 'SET_LENS_CATEGORY_SETTING',
+	//        category,
+	//        setting
+	//    }
+	//};
+	//
+	//export const shapeRightClicked = (e, shape) => {
+	//    return {
+	//        type: 'SHAPE_RIGHT_CLICKED',
+	//        e,
+	//        shape
+	//    }
+	//};
+	//
+	//export const toggleLensSticky = (state) => {
+	//    return {
+	//        type: 'SHAPE_STICKY_CHANGED',
+	//        state
+	//    }
+	//};
+	//
+	//export const globalCategoryChange = (category, categoryType) => {
+	//    return {
+	//        type: 'GLOBAL_CATEGORY_CHANGE',
+	//        category,
+	//        categoryType
+	//    }
+	//};
+	//
+	//export const showShapeButton = (shape) => {
+	//    return {
+	//        type: 'SHOW_SHAPE_CONFIG_BUTTON',
+	//        shape
+	//    }
+	//};
+	//
+	//export const hideShapeButton = () => {
+	//    return {
+	//        type: 'HIDE_SHAPE_CONFIG_BUTTON'
+	//    }
+	//};
+	//
+	//export const hideShapeConfig = () => {
+	//    return {
+	//        type: 'HIDE_SHAPE_CONFIG'
+	//    }
+	//};
+	//
+	//export const exportCsv = () => {
+	//    return {
+	//        type: 'EXPORT_CSV'
+	//    }
+	//};
+	//
+	//export const setLensOrdinalValue = (setting, category) => {
+	//    return {
+	//        type: 'SET_LENS_ORDINAL',
+	//        setting,
+	//        category
+	//    }
+	//};
+	//
+	//export const zoomLevelChanged = (e) => {
+	//    return {
+	//        type: 'ZOOM_LEVEL_CHANGED',
+	//        e
+	//    }
+	//};
+	//
+	//const getAddressLatLng = (address) => {
+	//    fetch('https://maps.googleapis.com/maps/api/geocode/json?address='+address)
+	//        .then((response)=>{response.text()
+	//            .then((responseText) => {
+	//                //Dispatch an lon lat maybe?
+	//            })
+	//        });
+	//};
 
 /***/ },
 /* 192 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// the whatwg-fetch polyfill installs the fetch() function
+	// on the global object (window or self)
+	//
+	// Return that as the export for use in Webpack, Browserify etc.
+	__webpack_require__(193);
+	module.exports = self.fetch.bind(self);
+
+
+/***/ },
+/* 193 */
+/***/ function(module, exports) {
+
+	(function(self) {
+	  'use strict';
+	
+	  if (self.fetch) {
+	    return
+	  }
+	
+	  function normalizeName(name) {
+	    if (typeof name !== 'string') {
+	      name = String(name)
+	    }
+	    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+	      throw new TypeError('Invalid character in header field name')
+	    }
+	    return name.toLowerCase()
+	  }
+	
+	  function normalizeValue(value) {
+	    if (typeof value !== 'string') {
+	      value = String(value)
+	    }
+	    return value
+	  }
+	
+	  function Headers(headers) {
+	    this.map = {}
+	
+	    if (headers instanceof Headers) {
+	      headers.forEach(function(value, name) {
+	        this.append(name, value)
+	      }, this)
+	
+	    } else if (headers) {
+	      Object.getOwnPropertyNames(headers).forEach(function(name) {
+	        this.append(name, headers[name])
+	      }, this)
+	    }
+	  }
+	
+	  Headers.prototype.append = function(name, value) {
+	    name = normalizeName(name)
+	    value = normalizeValue(value)
+	    var list = this.map[name]
+	    if (!list) {
+	      list = []
+	      this.map[name] = list
+	    }
+	    list.push(value)
+	  }
+	
+	  Headers.prototype['delete'] = function(name) {
+	    delete this.map[normalizeName(name)]
+	  }
+	
+	  Headers.prototype.get = function(name) {
+	    var values = this.map[normalizeName(name)]
+	    return values ? values[0] : null
+	  }
+	
+	  Headers.prototype.getAll = function(name) {
+	    return this.map[normalizeName(name)] || []
+	  }
+	
+	  Headers.prototype.has = function(name) {
+	    return this.map.hasOwnProperty(normalizeName(name))
+	  }
+	
+	  Headers.prototype.set = function(name, value) {
+	    this.map[normalizeName(name)] = [normalizeValue(value)]
+	  }
+	
+	  Headers.prototype.forEach = function(callback, thisArg) {
+	    Object.getOwnPropertyNames(this.map).forEach(function(name) {
+	      this.map[name].forEach(function(value) {
+	        callback.call(thisArg, value, name, this)
+	      }, this)
+	    }, this)
+	  }
+	
+	  function consumed(body) {
+	    if (body.bodyUsed) {
+	      return Promise.reject(new TypeError('Already read'))
+	    }
+	    body.bodyUsed = true
+	  }
+	
+	  function fileReaderReady(reader) {
+	    return new Promise(function(resolve, reject) {
+	      reader.onload = function() {
+	        resolve(reader.result)
+	      }
+	      reader.onerror = function() {
+	        reject(reader.error)
+	      }
+	    })
+	  }
+	
+	  function readBlobAsArrayBuffer(blob) {
+	    var reader = new FileReader()
+	    reader.readAsArrayBuffer(blob)
+	    return fileReaderReady(reader)
+	  }
+	
+	  function readBlobAsText(blob) {
+	    var reader = new FileReader()
+	    reader.readAsText(blob)
+	    return fileReaderReady(reader)
+	  }
+	
+	  var support = {
+	    blob: 'FileReader' in self && 'Blob' in self && (function() {
+	      try {
+	        new Blob();
+	        return true
+	      } catch(e) {
+	        return false
+	      }
+	    })(),
+	    formData: 'FormData' in self,
+	    arrayBuffer: 'ArrayBuffer' in self
+	  }
+	
+	  function Body() {
+	    this.bodyUsed = false
+	
+	
+	    this._initBody = function(body) {
+	      this._bodyInit = body
+	      if (typeof body === 'string') {
+	        this._bodyText = body
+	      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+	        this._bodyBlob = body
+	      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+	        this._bodyFormData = body
+	      } else if (!body) {
+	        this._bodyText = ''
+	      } else if (support.arrayBuffer && ArrayBuffer.prototype.isPrototypeOf(body)) {
+	        // Only support ArrayBuffers for POST method.
+	        // Receiving ArrayBuffers happens via Blobs, instead.
+	      } else {
+	        throw new Error('unsupported BodyInit type')
+	      }
+	
+	      if (!this.headers.get('content-type')) {
+	        if (typeof body === 'string') {
+	          this.headers.set('content-type', 'text/plain;charset=UTF-8')
+	        } else if (this._bodyBlob && this._bodyBlob.type) {
+	          this.headers.set('content-type', this._bodyBlob.type)
+	        }
+	      }
+	    }
+	
+	    if (support.blob) {
+	      this.blob = function() {
+	        var rejected = consumed(this)
+	        if (rejected) {
+	          return rejected
+	        }
+	
+	        if (this._bodyBlob) {
+	          return Promise.resolve(this._bodyBlob)
+	        } else if (this._bodyFormData) {
+	          throw new Error('could not read FormData body as blob')
+	        } else {
+	          return Promise.resolve(new Blob([this._bodyText]))
+	        }
+	      }
+	
+	      this.arrayBuffer = function() {
+	        return this.blob().then(readBlobAsArrayBuffer)
+	      }
+	
+	      this.text = function() {
+	        var rejected = consumed(this)
+	        if (rejected) {
+	          return rejected
+	        }
+	
+	        if (this._bodyBlob) {
+	          return readBlobAsText(this._bodyBlob)
+	        } else if (this._bodyFormData) {
+	          throw new Error('could not read FormData body as text')
+	        } else {
+	          return Promise.resolve(this._bodyText)
+	        }
+	      }
+	    } else {
+	      this.text = function() {
+	        var rejected = consumed(this)
+	        return rejected ? rejected : Promise.resolve(this._bodyText)
+	      }
+	    }
+	
+	    if (support.formData) {
+	      this.formData = function() {
+	        return this.text().then(decode)
+	      }
+	    }
+	
+	    this.json = function() {
+	      return this.text().then(JSON.parse)
+	    }
+	
+	    return this
+	  }
+	
+	  // HTTP methods whose capitalization should be normalized
+	  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
+	
+	  function normalizeMethod(method) {
+	    var upcased = method.toUpperCase()
+	    return (methods.indexOf(upcased) > -1) ? upcased : method
+	  }
+	
+	  function Request(input, options) {
+	    options = options || {}
+	    var body = options.body
+	    if (Request.prototype.isPrototypeOf(input)) {
+	      if (input.bodyUsed) {
+	        throw new TypeError('Already read')
+	      }
+	      this.url = input.url
+	      this.credentials = input.credentials
+	      if (!options.headers) {
+	        this.headers = new Headers(input.headers)
+	      }
+	      this.method = input.method
+	      this.mode = input.mode
+	      if (!body) {
+	        body = input._bodyInit
+	        input.bodyUsed = true
+	      }
+	    } else {
+	      this.url = input
+	    }
+	
+	    this.credentials = options.credentials || this.credentials || 'omit'
+	    if (options.headers || !this.headers) {
+	      this.headers = new Headers(options.headers)
+	    }
+	    this.method = normalizeMethod(options.method || this.method || 'GET')
+	    this.mode = options.mode || this.mode || null
+	    this.referrer = null
+	
+	    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
+	      throw new TypeError('Body not allowed for GET or HEAD requests')
+	    }
+	    this._initBody(body)
+	  }
+	
+	  Request.prototype.clone = function() {
+	    return new Request(this)
+	  }
+	
+	  function decode(body) {
+	    var form = new FormData()
+	    body.trim().split('&').forEach(function(bytes) {
+	      if (bytes) {
+	        var split = bytes.split('=')
+	        var name = split.shift().replace(/\+/g, ' ')
+	        var value = split.join('=').replace(/\+/g, ' ')
+	        form.append(decodeURIComponent(name), decodeURIComponent(value))
+	      }
+	    })
+	    return form
+	  }
+	
+	  function headers(xhr) {
+	    var head = new Headers()
+	    var pairs = xhr.getAllResponseHeaders().trim().split('\n')
+	    pairs.forEach(function(header) {
+	      var split = header.trim().split(':')
+	      var key = split.shift().trim()
+	      var value = split.join(':').trim()
+	      head.append(key, value)
+	    })
+	    return head
+	  }
+	
+	  Body.call(Request.prototype)
+	
+	  function Response(bodyInit, options) {
+	    if (!options) {
+	      options = {}
+	    }
+	
+	    this.type = 'default'
+	    this.status = options.status
+	    this.ok = this.status >= 200 && this.status < 300
+	    this.statusText = options.statusText
+	    this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
+	    this.url = options.url || ''
+	    this._initBody(bodyInit)
+	  }
+	
+	  Body.call(Response.prototype)
+	
+	  Response.prototype.clone = function() {
+	    return new Response(this._bodyInit, {
+	      status: this.status,
+	      statusText: this.statusText,
+	      headers: new Headers(this.headers),
+	      url: this.url
+	    })
+	  }
+	
+	  Response.error = function() {
+	    var response = new Response(null, {status: 0, statusText: ''})
+	    response.type = 'error'
+	    return response
+	  }
+	
+	  var redirectStatuses = [301, 302, 303, 307, 308]
+	
+	  Response.redirect = function(url, status) {
+	    if (redirectStatuses.indexOf(status) === -1) {
+	      throw new RangeError('Invalid status code')
+	    }
+	
+	    return new Response(null, {status: status, headers: {location: url}})
+	  }
+	
+	  self.Headers = Headers;
+	  self.Request = Request;
+	  self.Response = Response;
+	
+	  self.fetch = function(input, init) {
+	    return new Promise(function(resolve, reject) {
+	      var request
+	      if (Request.prototype.isPrototypeOf(input) && !init) {
+	        request = input
+	      } else {
+	        request = new Request(input, init)
+	      }
+	
+	      var xhr = new XMLHttpRequest()
+	
+	      function responseURL() {
+	        if ('responseURL' in xhr) {
+	          return xhr.responseURL
+	        }
+	
+	        // Avoid security warnings on getResponseHeader when not allowed by CORS
+	        if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
+	          return xhr.getResponseHeader('X-Request-URL')
+	        }
+	
+	        return;
+	      }
+	
+	      xhr.onload = function() {
+	        var status = (xhr.status === 1223) ? 204 : xhr.status
+	        if (status < 100 || status > 599) {
+	          reject(new TypeError('Network request failed'))
+	          return
+	        }
+	        var options = {
+	          status: status,
+	          statusText: xhr.statusText,
+	          headers: headers(xhr),
+	          url: responseURL()
+	        }
+	        var body = 'response' in xhr ? xhr.response : xhr.responseText;
+	        resolve(new Response(body, options))
+	      }
+	
+	      xhr.onerror = function() {
+	        reject(new TypeError('Network request failed'))
+	      }
+	
+	      xhr.open(request.method, request.url, true)
+	
+	      if (request.credentials === 'include') {
+	        xhr.withCredentials = true
+	      }
+	
+	      if ('responseType' in xhr && support.blob) {
+	        xhr.responseType = 'blob'
+	      }
+	
+	      request.headers.forEach(function(value, name) {
+	        xhr.setRequestHeader(name, value)
+	      })
+	
+	      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
+	    })
+	  }
+	  self.fetch.polyfill = true
+	})(typeof self !== 'undefined' ? self : this);
+
+
+/***/ },
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21973,7 +22565,81 @@
 	    value: true
 	});
 	
-	var _State = __webpack_require__(193);
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	__webpack_require__(203);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var UIManager = function (_React$Component) {
+	    _inherits(UIManager, _React$Component);
+	
+	    function UIManager(props) {
+	        _classCallCheck(this, UIManager);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(UIManager).call(this, props));
+	    }
+	
+	    _createClass(UIManager, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'ds-web-ui' },
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    'DS-WEB-UI Test Bed'
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'inline-div' },
+	                    '1. Click-Drag to create'
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'inline-div' },
+	                    '2. Right-click-drag to move'
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'inline-div' },
+	                    '3. Double-right-click to toggle wall mode'
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return UIManager;
+	}(_react2.default.Component);
+	
+	;
+	
+	exports.default = UIManager;
+
+/***/ },
+/* 195 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _State = __webpack_require__(196);
 	
 	var _State2 = _interopRequireDefault(_State);
 	
@@ -21998,13 +22664,125 @@
 	        return _this;
 	    }
 	
+	    _createClass(LayerManager, [{
+	        key: 'getLensOfRadius',
+	        value: function getLensOfRadius(radius, isWall, x, y) {
+	            var graphics = this.add.graphics(0, 0);
+	            graphics.lineStyle(2, 0x000000, 1);
+	            graphics.drawCircle(0, 0, radius);
+	            graphics.boundsPadding = 0;
+	            var sprite = void 0;
+	            if (isWall) {
+	                sprite = this.p2Group.create(x, y);
+	                sprite.validPointsCollisionGroup = this.physics.p2.createCollisionGroup();
+	                this.physics.p2.updateBoundsCollisionGroup();
+	                sprite.body.setCollisionGroup(sprite.validPointsCollisionGroup);
+	                sprite.body.static = true;
+	                sprite.body.setCircle(radius / 2);
+	                this.layers.forEach(function (layer) {
+	                    layer.pointSprites.forEach(function (point) {
+	                        if (point.shouldRepel) {
+	                            //TODO: maintain the point's existing collisionGroup collection as well
+	                            point.body.setCollisionGroup(sprite.validPointsCollisionGroup);
+	                            point.body.collides(sprite.validPointsCollisionGroup);
+	                        }
+	                    });
+	                });
+	            } else {
+	                sprite = this.add.sprite(x, y);
+	            }
+	            sprite.addChild(graphics);
+	            sprite.inputEnabled = true;
+	            sprite.radius = radius;
+	            sprite.circle = new Phaser.Circle(x, y, radius);
+	            sprite.isWall = isWall;
+	            sprite.id = 'lens_' + Math.random();
+	            return sprite;
+	        }
+	    }, {
+	        key: 'getNextLensIntersectingPoint',
+	        value: function getNextLensIntersectingPoint(x, y) {
+	            return this.lenses.filter(function (lens) {
+	                return lens.circle.contains(x, y);
+	            })[0];
+	        }
+	    }, {
+	        key: 'managerMouseDown',
+	        value: function managerMouseDown(e) {
+	            var _this2 = this;
+	
+	            if (e.button === 0) {
+	                //One down event creates a lens of size 30 and sets it for resizing
+	                var sprite = this.getLensOfRadius(30, true, this.input.x, this.input.y);
+	                this.lenses.push(sprite);
+	                this.resizingLens = sprite;
+	            } else if (e.button === 2) {
+	                this.selectedLens = this.getNextLensIntersectingPoint(this.input.x, this.input.y);
+	                if (this.time.now - this.lastMouseDown < 500) {
+	                    this.selectedLens.destroy();
+	                    this.lenses = this.lenses.filter(function (lens) {
+	                        return lens.id !== _this2.selectedLens.id;
+	                    });
+	                    this.selectedLens = this.getLensOfRadius(this.selectedLens.radius, !this.selectedLens.isWall, this.selectedLens.x, this.selectedLens.y);
+	                    this.lenses.push(this.selectedLens);
+	                    console.debug('lens wall toggle');
+	                }
+	            }
+	            this.lastMouseDown = this.time.now;
+	        }
+	    }, {
+	        key: 'managerMouseMove',
+	        value: function managerMouseMove(e) {
+	            var _this3 = this;
+	
+	            if (this.resizingLens) {
+	                var lens = this.resizingLens;
+	                var radius = 30 + Math.sqrt(Math.pow(this.input.x - lens.x, 2) + Math.pow(this.input.y - lens.y, 2));
+	                var position = { x: lens.x, y: lens.y };
+	                this.resizingLens.destroy();
+	                this.lenses = this.lenses.filter(function (lens) {
+	                    return lens.id !== _this3.resizingLens.id;
+	                });
+	                this.resizingLens = this.getLensOfRadius(radius, true, position.x, position.y);
+	                this.lenses.push(this.resizingLens);
+	            } else if (e.button === 2 && this.selectedLens) {
+	                this.selectedLens.destroy();
+	                this.lenses = this.lenses.filter(function (lens) {
+	                    return lens.id !== _this3.selectedLens.id;
+	                });
+	                this.selectedLens = this.getLensOfRadius(this.selectedLens.radius, this.selectedLens.isWall, this.input.x, this.input.y);
+	                this.lenses.push(this.selectedLens);
+	                //TODO: move gfx sprite rather than recreate
+	                //this.selectedLens.x = this.input.x;
+	                //this.selectedLens.y = this.input.y;
+	                console.debug('lens moved');
+	            }
+	        }
+	    }, {
+	        key: 'clearSelectedLens',
+	        value: function clearSelectedLens() {
+	            //Deselect lens
+	            delete this.selectedLens;
+	            delete this.resizingLens;
+	        }
+	    }], [{
+	        key: 'getRandomPoints',
+	        value: function getRandomPoints(number) {
+	            var points = [];
+	            for (var i = 0; i < number; i++) {
+	                points.push({ lng: Math.random() * 1900, lat: Math.random() * 400 });
+	            }
+	            return points;
+	        }
+	    }]);
+	
 	    return LayerManager;
 	}(Phaser.Game);
 	
 	exports.default = LayerManager;
 
 /***/ },
-/* 193 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22015,13 +22793,17 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _Events = __webpack_require__(194);
+	var _Events = __webpack_require__(197);
 	
 	var _Events2 = _interopRequireDefault(_Events);
 	
-	var _Layer = __webpack_require__(195);
+	var _Layer = __webpack_require__(198);
 	
 	var _Layer2 = _interopRequireDefault(_Layer);
+	
+	var _LayerManager = __webpack_require__(195);
+	
+	var _LayerManager2 = _interopRequireDefault(_LayerManager);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -22050,40 +22832,78 @@
 	            this.world.setBounds(0, 0, 2000, 500);
 	            this.stage.backgroundColor = '#FFFFFF';
 	            //Physics init
-	            if (document.URL.indexOf('P2') !== -1) {
-	                this.physics.startSystem(Phaser.Physics.P2JS);
-	                this.physics.p2.gravity.y = 100;
-	                this.physics.p2.restitution = 1.09;
-	            } else {
-	                this.physics.startSystem(Phaser.Physics.ARCADE);
-	                this.physics.arcade.gravity.y = 200;
-	            }
+	            this.physics.startSystem(Phaser.Physics.P2JS);
+	            this.physics.p2.gravity.y = 0;
+	            this.physics.p2.restitution = 1.09;
+	            this.game.p2Group = this.game.add.physicsGroup(Phaser.Physics.P2JS);
 	
-	            //Event Hooks
-	            this.addLayerSignal = new Phaser.Signal();
-	            this.addLayerSignal.add(_Events2.default.addLayer, this);
+	            //Event Hooks for actions which come from/goto the DOM UI
+	            //this.addLayerSignal = new Phaser.Signal();
+	            //this.addLayerSignal.add(Events.addLayer, this);
+	            //this.removeLayerSignal = new Phaser.Signal();
+	            //this.removeLayerSignal.add(Events.removeLayer, this);
+	            //this.globalCategoryChangedSignal = new Phaser.Signal();
+	            //this.globalCategoryChangedSignal.add(Events.globalCategoryChanged, this);
+	            //etc...
 	
-	            this.layers = [];
+	            //Internal Events
+	            //this.input.mouse.mouseWheelCallback = this.mouseZoom;
+	            this.input.mouse.mouseDownCallback = this.mouseDown;
+	            this.input.mouse.mouseUpCallback = this.mouseUp;
+	            this.input.mouse.mouseOutCallback = this.mouseOut;
+	            this.input.mouse.mouseMoveCallback = this.mouseMove;
+	
+	            //Get rid of default right click menu
+	            this.game.canvas.oncontextmenu = function (e) {
+	                e.preventDefault();
+	            };
+	
+	            this.game.gfx = this.game.add.graphics(0, 0);
+	
+	            this.game.selectedLens = null;
+	            this.game.layers = [];
+	            this.game.lenses = [];
 	            //Add test layer
-	            this.layers.push(new _Layer2.default(this.getRandomPoints(document.URL.indexOf('P2') !== -1 ? 1200 : 12000), this));
+	            this.game.layers.push(new _Layer2.default(_LayerManager2.default.getRandomPoints(1200), this));
 	            this.game.time.advancedTiming = true;
 	        }
 	    }, {
 	        key: 'update',
 	        value: function update() {
+	            var _this2 = this;
+	
 	            console.debug('fps: ' + this.game.time.fps);
-	            this.layers.forEach(function (layer) {
-	                layer.update();
+	            this.game.layers.forEach(function (layer) {
+	                layer.pointSprites.forEach(function (point) {
+	                    _this2.game.lenses.forEach(function (lens) {
+	                        if (lens.circle.contains(point.x, point.y)) {
+	                            point.alpha = 0.5;
+	                        } else {
+	                            point.alpha = 1.0;
+	                        }
+	                    });
+	                });
 	            });
 	        }
 	    }, {
-	        key: 'getRandomPoints',
-	        value: function getRandomPoints(number) {
-	            var points = [];
-	            for (var i = 0; i < number; i++) {
-	                points.push({ lng: Math.random() * 1900, lat: Math.random() * 400 });
-	            }
-	            return points;
+	        key: 'mouseDown',
+	        value: function mouseDown(e) {
+	            this.managerMouseDown(e);
+	        }
+	    }, {
+	        key: 'mouseMove',
+	        value: function mouseMove(e) {
+	            this.managerMouseMove(e);
+	        }
+	    }, {
+	        key: 'mouseUp',
+	        value: function mouseUp() {
+	            this.clearSelectedLens();
+	        }
+	    }, {
+	        key: 'mouseOut',
+	        value: function mouseOut() {
+	            this.clearSelectedLens();
 	        }
 	    }]);
 	
@@ -22093,7 +22913,7 @@
 	exports.default = State;
 
 /***/ },
-/* 194 */
+/* 197 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -22108,7 +22928,7 @@
 	exports.default = Events;
 
 /***/ },
-/* 195 */
+/* 198 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22129,30 +22949,33 @@
 	
 	        this.pointSprites = [];
 	        this.phaserInstance = phaserInstance;
-	        this.group = phaserInstance.add.physicsGroup(Phaser.Physics.P2JS);
 	
 	        var bmd = phaserInstance.add.bitmapData(10, 10);
 	        bmd.circle(5, 5, 5);
 	
+	        var i = 0;
 	        points.forEach(function (point) {
-	
-	            if (document.URL.indexOf('P2') !== -1) {
-	                var sprite = _this.group.create(point.lng, point.lat, bmd);
-	                sprite.body.collideWorldBounds = true;
-	                _this.pointSprites.push(sprite);
-	            } else {
-	                var _sprite = phaserInstance.add.sprite(point.lng, point.lat, bmd);
-	                phaserInstance.physics.arcade.enable(_sprite);
-	                _sprite.body.collideWorldBounds = true;
-	                _sprite.body.bounce.y = 0.9;
-	                _this.pointSprites.push(_sprite);
-	            }
+	            var sprite = phaserInstance.game.p2Group.create(point.lng, point.lat, bmd);
+	            sprite.body.collideWorldBounds = true;
+	            sprite.inputEnabled = true;
+	            sprite.shouldRepel = i % 2 === 0;
+	            sprite.events.onInputDown.add(function () {
+	                return _this.onPointClick(sprite);
+	            }, _this);
+	            _this.pointSprites.push(sprite);
+	            i++;
 	        });
 	    }
 	
 	    _createClass(Layer, [{
 	        key: 'update',
 	        value: function update() {}
+	    }, {
+	        key: 'onPointClick',
+	        value: function onPointClick(sprite) {
+	            console.log('sprite click');
+	            //TODO: relay this event to the UI somehow...
+	        }
 	    }]);
 	
 	    return Layer;
@@ -22161,16 +22984,16 @@
 	exports.default = Layer;
 
 /***/ },
-/* 196 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(197);
+	var content = __webpack_require__(200);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(199)(content, {});
+	var update = __webpack_require__(202)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -22187,10 +23010,10 @@
 	}
 
 /***/ },
-/* 197 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(198)();
+	exports = module.exports = __webpack_require__(201)();
 	// imports
 	
 	
@@ -22201,7 +23024,7 @@
 
 
 /***/ },
-/* 198 */
+/* 201 */
 /***/ function(module, exports) {
 
 	/*
@@ -22257,7 +23080,7 @@
 
 
 /***/ },
-/* 199 */
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -22506,6 +23329,46 @@
 		if(oldSrc)
 			URL.revokeObjectURL(oldSrc);
 	}
+
+
+/***/ },
+/* 203 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(204);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(202)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./UIManager.css", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./UIManager.css");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 204 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(201)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, ".ds-web-ui .inline-div{\r\n    display: inline-block;\r\n}\r\n\r\n.ds-web-ui div{\r\n    margin: 5px;\r\n}", ""]);
+	
+	// exports
 
 
 /***/ }
