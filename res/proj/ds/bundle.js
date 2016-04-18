@@ -21805,11 +21805,11 @@
 	
 	var _UIStateContainer2 = _interopRequireDefault(_UIStateContainer);
 	
-	var _LayerManager = __webpack_require__(195);
+	var _LayerManager = __webpack_require__(199);
 	
 	var _LayerManager2 = _interopRequireDefault(_LayerManager);
 	
-	__webpack_require__(199);
+	__webpack_require__(203);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -21865,7 +21865,7 @@
 	
 	var _UIManager2 = _interopRequireDefault(_UIManager);
 	
-	var _LayerManager = __webpack_require__(195);
+	var _LayerManager = __webpack_require__(199);
 	
 	var _LayerManager2 = _interopRequireDefault(_LayerManager);
 	
@@ -22571,7 +22571,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	__webpack_require__(203);
+	__webpack_require__(195);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -22631,376 +22631,20 @@
 /* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _State = __webpack_require__(196);
-	
-	var _State2 = _interopRequireDefault(_State);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var LayerManager = function (_Phaser$Game) {
-	    _inherits(LayerManager, _Phaser$Game);
-	
-	    function LayerManager(h, w) {
-	        _classCallCheck(this, LayerManager);
-	
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LayerManager).call(this, h, w, Phaser.AUTO, 'layerManager', null));
-	
-	        _this.state.add('state', _State2.default, false);
-	        _this.state.start('state');
-	        return _this;
-	    }
-	
-	    _createClass(LayerManager, [{
-	        key: 'getLensOfRadius',
-	        value: function getLensOfRadius(radius, isWall, x, y) {
-	            var graphics = this.add.graphics(0, 0);
-	            graphics.lineStyle(2, 0x000000, 1);
-	            graphics.drawCircle(0, 0, radius);
-	            graphics.boundsPadding = 0;
-	            var sprite = void 0;
-	            if (isWall) {
-	                sprite = this.p2Group.create(x, y);
-	                sprite.validPointsCollisionGroup = this.physics.p2.createCollisionGroup();
-	                this.physics.p2.updateBoundsCollisionGroup();
-	                sprite.body.setCollisionGroup(sprite.validPointsCollisionGroup);
-	                sprite.body.static = true;
-	                sprite.body.setCircle(radius / 2);
-	                this.layers.forEach(function (layer) {
-	                    layer.pointSprites.forEach(function (point) {
-	                        if (point.shouldRepel) {
-	                            //TODO: maintain the point's existing collisionGroup collection as well
-	                            point.body.setCollisionGroup(sprite.validPointsCollisionGroup);
-	                            point.body.collides(sprite.validPointsCollisionGroup);
-	                        }
-	                    });
-	                });
-	            } else {
-	                sprite = this.add.sprite(x, y);
-	            }
-	            sprite.addChild(graphics);
-	            sprite.inputEnabled = true;
-	            sprite.radius = radius;
-	            sprite.circle = new Phaser.Circle(x, y, radius);
-	            sprite.isWall = isWall;
-	            sprite.id = 'lens_' + Math.random();
-	            return sprite;
-	        }
-	    }, {
-	        key: 'getNextLensIntersectingPoint',
-	        value: function getNextLensIntersectingPoint(x, y) {
-	            return this.lenses.filter(function (lens) {
-	                return lens.circle.contains(x, y);
-	            })[0];
-	        }
-	    }, {
-	        key: 'managerMouseDown',
-	        value: function managerMouseDown(e) {
-	            var _this2 = this;
-	
-	            if (e.button === 0) {
-	                //One down event creates a lens of size 30 and sets it for resizing
-	                var sprite = this.getLensOfRadius(30, true, this.input.x, this.input.y);
-	                this.lenses.push(sprite);
-	                this.resizingLens = sprite;
-	            } else if (e.button === 2) {
-	                this.selectedLens = this.getNextLensIntersectingPoint(this.input.x, this.input.y);
-	                if (this.time.now - this.lastMouseDown < 500) {
-	                    this.selectedLens.destroy();
-	                    this.lenses = this.lenses.filter(function (lens) {
-	                        return lens.id !== _this2.selectedLens.id;
-	                    });
-	                    this.selectedLens = this.getLensOfRadius(this.selectedLens.radius, !this.selectedLens.isWall, this.selectedLens.x, this.selectedLens.y);
-	                    this.lenses.push(this.selectedLens);
-	                    console.debug('lens wall toggle');
-	                }
-	            }
-	            this.lastMouseDown = this.time.now;
-	        }
-	    }, {
-	        key: 'managerMouseMove',
-	        value: function managerMouseMove(e) {
-	            var _this3 = this;
-	
-	            if (this.resizingLens) {
-	                var lens = this.resizingLens;
-	                var radius = 30 + Math.sqrt(Math.pow(this.input.x - lens.x, 2) + Math.pow(this.input.y - lens.y, 2));
-	                var position = { x: lens.x, y: lens.y };
-	                this.resizingLens.destroy();
-	                this.lenses = this.lenses.filter(function (lens) {
-	                    return lens.id !== _this3.resizingLens.id;
-	                });
-	                this.resizingLens = this.getLensOfRadius(radius, true, position.x, position.y);
-	                this.lenses.push(this.resizingLens);
-	            } else if (e.button === 2 && this.selectedLens) {
-	                this.selectedLens.destroy();
-	                this.lenses = this.lenses.filter(function (lens) {
-	                    return lens.id !== _this3.selectedLens.id;
-	                });
-	                this.selectedLens = this.getLensOfRadius(this.selectedLens.radius, this.selectedLens.isWall, this.input.x, this.input.y);
-	                this.lenses.push(this.selectedLens);
-	                //TODO: move gfx sprite rather than recreate
-	                //this.selectedLens.x = this.input.x;
-	                //this.selectedLens.y = this.input.y;
-	                console.debug('lens moved');
-	            }
-	        }
-	    }, {
-	        key: 'clearSelectedLens',
-	        value: function clearSelectedLens() {
-	            //Deselect lens
-	            delete this.selectedLens;
-	            delete this.resizingLens;
-	        }
-	    }], [{
-	        key: 'getRandomPoints',
-	        value: function getRandomPoints(number) {
-	            var points = [];
-	            for (var i = 0; i < number; i++) {
-	                points.push({ lng: Math.random() * 1900, lat: Math.random() * 400 });
-	            }
-	            return points;
-	        }
-	    }]);
-	
-	    return LayerManager;
-	}(Phaser.Game);
-	
-	exports.default = LayerManager;
-
-/***/ },
-/* 196 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _Events = __webpack_require__(197);
-	
-	var _Events2 = _interopRequireDefault(_Events);
-	
-	var _Layer = __webpack_require__(198);
-	
-	var _Layer2 = _interopRequireDefault(_Layer);
-	
-	var _LayerManager = __webpack_require__(195);
-	
-	var _LayerManager2 = _interopRequireDefault(_LayerManager);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var State = function (_Phaser$State) {
-	    _inherits(State, _Phaser$State);
-	
-	    function State() {
-	        _classCallCheck(this, State);
-	
-	        return _possibleConstructorReturn(this, Object.getPrototypeOf(State).apply(this, arguments));
-	    }
-	
-	    _createClass(State, [{
-	        key: 'preload',
-	        value: function preload() {}
-	    }, {
-	        key: 'create',
-	        value: function create() {
-	            //Internal canvas size
-	            this.world.setBounds(0, 0, 2000, 500);
-	            this.stage.backgroundColor = '#FFFFFF';
-	            //Physics init
-	            this.physics.startSystem(Phaser.Physics.P2JS);
-	            this.physics.p2.gravity.y = 0;
-	            this.physics.p2.restitution = 1.09;
-	            this.game.p2Group = this.game.add.physicsGroup(Phaser.Physics.P2JS);
-	
-	            //Event Hooks for actions which come from/goto the DOM UI
-	            //this.addLayerSignal = new Phaser.Signal();
-	            //this.addLayerSignal.add(Events.addLayer, this);
-	            //this.removeLayerSignal = new Phaser.Signal();
-	            //this.removeLayerSignal.add(Events.removeLayer, this);
-	            //this.globalCategoryChangedSignal = new Phaser.Signal();
-	            //this.globalCategoryChangedSignal.add(Events.globalCategoryChanged, this);
-	            //etc...
-	
-	            //Internal Events
-	            //this.input.mouse.mouseWheelCallback = this.mouseZoom;
-	            this.input.mouse.mouseDownCallback = this.mouseDown;
-	            this.input.mouse.mouseUpCallback = this.mouseUp;
-	            this.input.mouse.mouseOutCallback = this.mouseOut;
-	            this.input.mouse.mouseMoveCallback = this.mouseMove;
-	
-	            //Get rid of default right click menu
-	            this.game.canvas.oncontextmenu = function (e) {
-	                e.preventDefault();
-	            };
-	
-	            this.game.gfx = this.game.add.graphics(0, 0);
-	
-	            this.game.selectedLens = null;
-	            this.game.layers = [];
-	            this.game.lenses = [];
-	            //Add test layer
-	            this.game.layers.push(new _Layer2.default(_LayerManager2.default.getRandomPoints(1200), this));
-	            this.game.time.advancedTiming = true;
-	        }
-	    }, {
-	        key: 'update',
-	        value: function update() {
-	            var _this2 = this;
-	
-	            console.debug('fps: ' + this.game.time.fps);
-	            this.game.layers.forEach(function (layer) {
-	                layer.pointSprites.forEach(function (point) {
-	                    _this2.game.lenses.forEach(function (lens) {
-	                        if (lens.circle.contains(point.x, point.y)) {
-	                            point.alpha = 0.5;
-	                        } else {
-	                            point.alpha = 1.0;
-	                        }
-	                    });
-	                });
-	            });
-	        }
-	    }, {
-	        key: 'mouseDown',
-	        value: function mouseDown(e) {
-	            this.managerMouseDown(e);
-	        }
-	    }, {
-	        key: 'mouseMove',
-	        value: function mouseMove(e) {
-	            this.managerMouseMove(e);
-	        }
-	    }, {
-	        key: 'mouseUp',
-	        value: function mouseUp() {
-	            this.clearSelectedLens();
-	        }
-	    }, {
-	        key: 'mouseOut',
-	        value: function mouseOut() {
-	            this.clearSelectedLens();
-	        }
-	    }]);
-	
-	    return State;
-	}(Phaser.State);
-	
-	exports.default = State;
-
-/***/ },
-/* 197 */
-/***/ function(module, exports) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var Events = {
-	    addLayer: function addLayer() {}
-	};
-	
-	exports.default = Events;
-
-/***/ },
-/* 198 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	var Layer = function () {
-	    function Layer(points, phaserInstance) {
-	        var _this = this;
-	
-	        _classCallCheck(this, Layer);
-	
-	        this.pointSprites = [];
-	        this.phaserInstance = phaserInstance;
-	
-	        var bmd = phaserInstance.add.bitmapData(10, 10);
-	        bmd.circle(5, 5, 5);
-	
-	        var i = 0;
-	        points.forEach(function (point) {
-	            var sprite = phaserInstance.game.p2Group.create(point.lng, point.lat, bmd);
-	            sprite.body.collideWorldBounds = true;
-	            sprite.inputEnabled = true;
-	            sprite.shouldRepel = i % 2 === 0;
-	            sprite.events.onInputDown.add(function () {
-	                return _this.onPointClick(sprite);
-	            }, _this);
-	            _this.pointSprites.push(sprite);
-	            i++;
-	        });
-	    }
-	
-	    _createClass(Layer, [{
-	        key: 'update',
-	        value: function update() {}
-	    }, {
-	        key: 'onPointClick',
-	        value: function onPointClick(sprite) {
-	            console.log('sprite click');
-	            //TODO: relay this event to the UI somehow...
-	        }
-	    }]);
-	
-	    return Layer;
-	}();
-	
-	exports.default = Layer;
-
-/***/ },
-/* 199 */
-/***/ function(module, exports, __webpack_require__) {
-
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(200);
+	var content = __webpack_require__(196);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(202)(content, {});
+	var update = __webpack_require__(198)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./App.css", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./App.css");
+			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./UIManager.css", function() {
+				var newContent = require("!!./../../../node_modules/css-loader/index.js!./UIManager.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -23010,21 +22654,21 @@
 	}
 
 /***/ },
-/* 200 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(201)();
+	exports = module.exports = __webpack_require__(197)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, "", ""]);
+	exports.push([module.id, ".ds-web-ui .inline-div{\r\n    display: inline-block;\r\n}\r\n\r\n.ds-web-ui div{\r\n    margin: 5px;\r\n}", ""]);
 	
 	// exports
 
 
 /***/ },
-/* 201 */
+/* 197 */
 /***/ function(module, exports) {
 
 	/*
@@ -23080,7 +22724,7 @@
 
 
 /***/ },
-/* 202 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -23332,6 +22976,366 @@
 
 
 /***/ },
+/* 199 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _State = __webpack_require__(200);
+	
+	var _State2 = _interopRequireDefault(_State);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var LayerManager = function (_Phaser$Game) {
+	    _inherits(LayerManager, _Phaser$Game);
+	
+	    function LayerManager(h, w) {
+	        _classCallCheck(this, LayerManager);
+	
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LayerManager).call(this, h, w, Phaser.AUTO, 'layerManager', null));
+	
+	        _this.state.add('state', _State2.default, false);
+	        _this.state.start('state');
+	        return _this;
+	    }
+	
+	    _createClass(LayerManager, [{
+	        key: 'getLensOfRadius',
+	        value: function getLensOfRadius(radius, isWall, x, y) {
+	            var graphics = this.add.graphics(0, 0);
+	            graphics.lineStyle(2, 0x000000, 1);
+	            graphics.drawCircle(0, 0, radius);
+	            graphics.boundsPadding = 0;
+	            var sprite = void 0;
+	            if (isWall) {
+	                sprite = this.p2Group.create(x, y);
+	                sprite.validPointsCollisionGroup = this.physics.p2.createCollisionGroup();
+	                this.physics.p2.updateBoundsCollisionGroup();
+	                sprite.body.setCollisionGroup(sprite.validPointsCollisionGroup);
+	                sprite.body.static = true;
+	                sprite.body.setCircle(radius / 2);
+	                this.layers.forEach(function (layer) {
+	                    layer.pointSprites.forEach(function (point) {
+	                        if (point.shouldRepel) {
+	                            //TODO: maintain the point's existing collisionGroup collection as well
+	                            point.body.setCollisionGroup(sprite.validPointsCollisionGroup);
+	                            point.body.collides(sprite.validPointsCollisionGroup);
+	                        }
+	                    });
+	                });
+	            } else {
+	                sprite = this.add.sprite(x, y);
+	            }
+	            sprite.addChild(graphics);
+	            sprite.inputEnabled = true;
+	            sprite.radius = radius;
+	            sprite.circle = new Phaser.Circle(x, y, radius);
+	            sprite.isWall = isWall;
+	            sprite.id = 'lens_' + Math.random();
+	            return sprite;
+	        }
+	    }, {
+	        key: 'getNextLensIntersectingPoint',
+	        value: function getNextLensIntersectingPoint(x, y) {
+	            return this.lenses.filter(function (lens) {
+	                return lens.circle.contains(x, y);
+	            })[0];
+	        }
+	    }, {
+	        key: 'managerMouseDown',
+	        value: function managerMouseDown(e) {
+	            var _this2 = this;
+	
+	            if (e.button === 0) {
+	                //One down event creates a lens of size 30 and sets it for resizing
+	                var sprite = this.getLensOfRadius(30, true, this.input.x, this.input.y);
+	                this.lenses.push(sprite);
+	                this.resizingLens = sprite;
+	            } else if (e.button === 2) {
+	                this.selectedLens = this.getNextLensIntersectingPoint(this.input.x, this.input.y);
+	                if (this.time.now - this.lastMouseDown < 500) {
+	                    this.selectedLens.destroy();
+	                    this.lenses = this.lenses.filter(function (lens) {
+	                        return lens.id !== _this2.selectedLens.id;
+	                    });
+	                    this.selectedLens = this.getLensOfRadius(this.selectedLens.radius, !this.selectedLens.isWall, this.selectedLens.x, this.selectedLens.y);
+	                    this.lenses.push(this.selectedLens);
+	                    console.debug('lens wall toggle');
+	                }
+	            }
+	            this.lastMouseDown = this.time.now;
+	        }
+	    }, {
+	        key: 'managerMouseMove',
+	        value: function managerMouseMove(e) {
+	            var _this3 = this;
+	
+	            if (this.resizingLens) {
+	                var lens = this.resizingLens;
+	                var radius = 30 + Math.sqrt(Math.pow(this.input.x - lens.x, 2) + Math.pow(this.input.y - lens.y, 2));
+	                var position = { x: lens.x, y: lens.y };
+	                this.resizingLens.destroy();
+	                this.lenses = this.lenses.filter(function (lens) {
+	                    return lens.id !== _this3.resizingLens.id;
+	                });
+	                this.resizingLens = this.getLensOfRadius(radius, true, position.x, position.y);
+	                this.lenses.push(this.resizingLens);
+	            } else if (e.button === 2 && this.selectedLens) {
+	                this.selectedLens.destroy();
+	                this.lenses = this.lenses.filter(function (lens) {
+	                    return lens.id !== _this3.selectedLens.id;
+	                });
+	                this.selectedLens = this.getLensOfRadius(this.selectedLens.radius, this.selectedLens.isWall, this.input.x, this.input.y);
+	                this.lenses.push(this.selectedLens);
+	                //TODO: move gfx sprite rather than recreate
+	                //this.selectedLens.x = this.input.x;
+	                //this.selectedLens.y = this.input.y;
+	                console.debug('lens moved');
+	            }
+	        }
+	    }, {
+	        key: 'clearSelectedLens',
+	        value: function clearSelectedLens() {
+	            //Deselect lens
+	            delete this.selectedLens;
+	            delete this.resizingLens;
+	        }
+	    }], [{
+	        key: 'getRandomPoints',
+	        value: function getRandomPoints(number) {
+	            var points = [];
+	            for (var i = 0; i < number; i++) {
+	                points.push({ lng: Math.random() * 1900, lat: Math.random() * 400 });
+	            }
+	            return points;
+	        }
+	    }]);
+	
+	    return LayerManager;
+	}(Phaser.Game);
+	
+	exports.default = LayerManager;
+
+/***/ },
+/* 200 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _Events = __webpack_require__(201);
+	
+	var _Events2 = _interopRequireDefault(_Events);
+	
+	var _Layer = __webpack_require__(202);
+	
+	var _Layer2 = _interopRequireDefault(_Layer);
+	
+	var _LayerManager = __webpack_require__(199);
+	
+	var _LayerManager2 = _interopRequireDefault(_LayerManager);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var State = function (_Phaser$State) {
+	    _inherits(State, _Phaser$State);
+	
+	    function State() {
+	        _classCallCheck(this, State);
+	
+	        return _possibleConstructorReturn(this, Object.getPrototypeOf(State).apply(this, arguments));
+	    }
+	
+	    _createClass(State, [{
+	        key: 'preload',
+	        value: function preload() {}
+	    }, {
+	        key: 'create',
+	        value: function create() {
+	            //Internal canvas size
+	            this.world.setBounds(0, 0, 2000, 500);
+	            this.stage.backgroundColor = '#FFFFFF';
+	            //Physics init
+	            this.physics.startSystem(Phaser.Physics.P2JS);
+	            this.physics.p2.gravity.y = 0;
+	            this.physics.p2.restitution = 1.09;
+	            this.game.p2Group = this.game.add.physicsGroup(Phaser.Physics.P2JS);
+	
+	            //Event Hooks for actions which come from/goto the DOM UI
+	            //this.addLayerSignal = new Phaser.Signal();
+	            //this.addLayerSignal.add(Events.addLayer, this);
+	            //this.removeLayerSignal = new Phaser.Signal();
+	            //this.removeLayerSignal.add(Events.removeLayer, this);
+	            //this.globalCategoryChangedSignal = new Phaser.Signal();
+	            //this.globalCategoryChangedSignal.add(Events.globalCategoryChanged, this);
+	            //etc...
+	
+	            //Internal Events
+	            //this.input.mouse.mouseWheelCallback = this.mouseZoom;
+	            this.input.mouse.mouseDownCallback = this.mouseDown;
+	            this.input.touch.touchStartCallback = this.mouseDown;
+	            this.input.mouse.mouseUpCallback = this.mouseUp;
+	            this.input.touch.touchEndCallback = this.mouseUp;
+	            this.input.mouse.mouseOutCallback = this.mouseOut;
+	            this.input.touch.touchCancelCallback = this.mouseOut;
+	            this.input.mouse.mouseMoveCallback = this.mouseMove;
+	            this.input.touch.touchMoveCallback = this.mouseMove;
+	
+	            //Get rid of default right click menu
+	            this.game.canvas.oncontextmenu = function (e) {
+	                e.preventDefault();
+	            };
+	
+	            this.game.gfx = this.game.add.graphics(0, 0);
+	
+	            this.game.selectedLens = null;
+	            this.game.layers = [];
+	            this.game.lenses = [];
+	            //Add test layer
+	            this.game.layers.push(new _Layer2.default(_LayerManager2.default.getRandomPoints(1200), this));
+	            this.game.time.advancedTiming = true;
+	        }
+	    }, {
+	        key: 'update',
+	        value: function update() {
+	            var _this2 = this;
+	
+	            console.debug('fps: ' + this.game.time.fps);
+	            this.game.layers.forEach(function (layer) {
+	                layer.pointSprites.forEach(function (point) {
+	                    _this2.game.lenses.forEach(function (lens) {
+	                        if (lens.circle.contains(point.x, point.y)) {
+	                            point.alpha = 0.5;
+	                        } else {
+	                            point.alpha = 1.0;
+	                        }
+	                    });
+	                });
+	            });
+	        }
+	    }, {
+	        key: 'mouseDown',
+	        value: function mouseDown(e) {
+	            this.managerMouseDown(e);
+	        }
+	    }, {
+	        key: 'mouseMove',
+	        value: function mouseMove(e) {
+	            this.managerMouseMove(e);
+	        }
+	    }, {
+	        key: 'mouseUp',
+	        value: function mouseUp() {
+	            this.clearSelectedLens();
+	        }
+	    }, {
+	        key: 'mouseOut',
+	        value: function mouseOut() {
+	            this.clearSelectedLens();
+	        }
+	    }]);
+	
+	    return State;
+	}(Phaser.State);
+	
+	exports.default = State;
+
+/***/ },
+/* 201 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var Events = {
+	    addLayer: function addLayer() {}
+	};
+	
+	exports.default = Events;
+
+/***/ },
+/* 202 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	var Layer = function () {
+	    function Layer(points, phaserInstance) {
+	        var _this = this;
+	
+	        _classCallCheck(this, Layer);
+	
+	        this.pointSprites = [];
+	        this.phaserInstance = phaserInstance;
+	
+	        var bmd = phaserInstance.add.bitmapData(10, 10);
+	        bmd.circle(5, 5, 5);
+	
+	        var i = 0;
+	        points.forEach(function (point) {
+	            var sprite = phaserInstance.game.p2Group.create(point.lng, point.lat, bmd);
+	            sprite.body.collideWorldBounds = true;
+	            sprite.inputEnabled = true;
+	            sprite.shouldRepel = i % 2 === 0;
+	            sprite.events.onInputDown.add(function () {
+	                return _this.onPointClick(sprite);
+	            }, _this);
+	            _this.pointSprites.push(sprite);
+	            i++;
+	        });
+	    }
+	
+	    _createClass(Layer, [{
+	        key: 'update',
+	        value: function update() {}
+	    }, {
+	        key: 'onPointClick',
+	        value: function onPointClick(sprite) {
+	            console.log('sprite click');
+	            //TODO: relay this event to the UI somehow...
+	        }
+	    }]);
+	
+	    return Layer;
+	}();
+	
+	exports.default = Layer;
+
+/***/ },
 /* 203 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -23341,14 +23345,14 @@
 	var content = __webpack_require__(204);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(202)(content, {});
+	var update = __webpack_require__(198)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../../node_modules/css-loader/index.js!./UIManager.css", function() {
-				var newContent = require("!!./../../../node_modules/css-loader/index.js!./UIManager.css");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./App.css", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./App.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -23361,12 +23365,12 @@
 /* 204 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(201)();
+	exports = module.exports = __webpack_require__(197)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, ".ds-web-ui .inline-div{\r\n    display: inline-block;\r\n}\r\n\r\n.ds-web-ui div{\r\n    margin: 5px;\r\n}", ""]);
+	exports.push([module.id, "", ""]);
 	
 	// exports
 
